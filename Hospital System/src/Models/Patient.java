@@ -19,7 +19,7 @@ public class Patient
     private final String email;
 
     //Constructor
-    public Patient(String patientID, String firstName, String surname, String postcode, String address, String phone, String email)
+    public Patient(String patientID, String firstName, String surname, String address, String phone, String email)
     {
         this.patientID = Input.RequireNonNull(patientID);
         this.firstName = Input.RequireNonNull(firstName);
