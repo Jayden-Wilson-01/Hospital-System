@@ -5,12 +5,12 @@ import Utilities.Input;
 public class Insurance
 {
     //Identifiers
-    private final String insuranceID;
+    private String insuranceID;
 
     //Properties
-    private final String company;
-    private final String address;
-    private final String phone;
+    private String company;
+    private String address;
+    private String phone;
 
     //Constructor
     public Insurance(String insuranceID, String company, String address, String phone)
@@ -21,9 +21,29 @@ public class Insurance
         this.phone = Input.RequireNonNull(phone);
     }
 
+    public Insurance()
+    {
+        //Empty
+    }
+
     //Getters
     public String getInsuranceID() {return insuranceID;}
     public String getCompany() {return company;}
     public String getAddress() {return address;}
     public String getPhone() {return phone;}
+
+    //Setters
+    public void setInsuranceID(String insuranceID){this.insuranceID = insuranceID;}
+    public void setCompany(String company){this.company = company;}
+    public void setAddress(String address){this.address = address;}
+    public void setPhone(String phone){this.phone = phone;}
+
+    public void DisplayDetails()
+    {
+        System.out.println();
+        System.out.println("Insurance ID: " + insuranceID);
+        System.out.println("Company name: " + company);
+        System.out.println("Address: " + address);
+        System.out.println("Phone: " + phone);
+    }
 }

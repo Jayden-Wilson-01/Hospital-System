@@ -5,7 +5,7 @@ import Utilities.Input;
 public class Patient
 {
     //Identifiers
-    private final String patientID;
+    private String patientID;
 
     //Properties
     private final String firstName;
@@ -19,7 +19,7 @@ public class Patient
     private final String email;
 
     //Constructor
-    public Patient(String patientID, String firstName, String surname, String postcode, String address, String phone, String email)
+    public Patient(String patientID, String firstName, String surname, String address, String phone, String email)
     {
         this.patientID = Input.RequireNonNull(patientID);
         this.firstName = Input.RequireNonNull(firstName);
@@ -30,8 +30,17 @@ public class Patient
         this.email = Input.RequireNonNull(email);
     }
 
-    //Getters
+    public Patient(String firstName, String surname, String address, String phone, String email)
+    {
+        this.firstName = Input.RequireNonNull(firstName);
+        this.surname = Input.RequireNonNull(surname);
+        //this.postcode = Input.RequireNonNull(postcode);
+        this.address = Input.RequireNonNull(address);
+        this.phone = Input.RequireNonNull(phone);
+        this.email = Input.RequireNonNull(email);
+    }
 
+    //Getters
     public String getPatientID() {return patientID;}
     public String getFirstName() {return firstName;}
     public String getSurname() {return surname;}

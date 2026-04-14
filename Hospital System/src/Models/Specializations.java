@@ -1,11 +1,29 @@
 package Models;
 
-public enum Specializations
+public class Specializations
 {
-    CARDIOLOGY,
-    NEUROLOGY,
-    PEDIATRICS,
-    ONCOLOGY,
-    ORTHOPEDICS,
-    PSYCHIATRY
+    public enum SpecializationType
+    {
+        CARDIOLOGY,
+        NEUROLOGY,
+        PEDIATRICS,
+        ONCOLOGY,
+        ORTHOPEDICS,
+        PSYCHIATRY
+    }
+
+    public static void DisplayOptions()
+    {
+        System.out.println("Specialization Options");
+
+        for (int i = 0; i < SpecializationType.values().length; i++)
+        {
+            System.out.println(i+1 + ": " + SpecializationType.values()[i].name());
+        }
+    }
+
+    public static int OptionAmount()
+    {
+        return  SpecializationType.values().length;
+    }
 }

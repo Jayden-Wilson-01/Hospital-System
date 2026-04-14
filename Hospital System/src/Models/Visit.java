@@ -6,14 +6,14 @@ import java.time.LocalDate;
 public class Visit
 {
     //Identifiers
-    private final String visitID;
-    private final String patientID;
-    private final String doctorID;
+    private String visitID;
+    private String patientID;
+    private String doctorID;
 
     //Properties
-    private final LocalDate dateOfVisit;
-    private final String symptoms;
-    private final String diagnosis;
+    private LocalDate dateOfVisit;
+    private String symptoms;
+    private String diagnosis;
 
     //Constructor
     public Visit(String visitID, String patientID, String doctorID, LocalDate dateOfVisit, String symptoms, String diagnosis)
@@ -22,8 +22,13 @@ public class Visit
         this.patientID = Input.RequireNonNull(patientID);
         this.doctorID = Input.RequireNonNull(doctorID);
         this.dateOfVisit = Input.RequireNonNull(dateOfVisit);
-        this.symptoms = Input.RequireNonNull(symptoms);
-        this.diagnosis = Input.RequireNonNull(diagnosis);
+        this.symptoms = symptoms;
+        this.diagnosis = diagnosis;
+    }
+
+    public Visit()
+    {
+        //empty
     }
 
     //Getters
@@ -33,4 +38,23 @@ public class Visit
     public LocalDate getDateOfVisit() {return dateOfVisit;}
     public String getSymptoms() {return symptoms;}
     public String getDiagnosis() {return diagnosis;}
+
+    //Setters
+    public void setVisitID(String visitID) {this.visitID = visitID;}
+    public void setPatientID(String patientID) {this.patientID = patientID;}
+    public void setDoctorID(String doctorID) {this.doctorID = doctorID;}
+    public void setDateOfVisit(LocalDate dateOfVisit) {this.dateOfVisit = dateOfVisit;}
+    public void setSymptoms(String symptoms) {this.symptoms = symptoms;}
+    public void setDiagnosis(String diagnosis) {this.diagnosis = diagnosis;}
+
+    public void DisplayDetails()
+    {
+        System.out.println();
+        System.out.println("VisitID: " + visitID);
+        System.out.println("PatientID: " + patientID);
+        System.out.println("DoctorID: " + doctorID);
+        System.out.println("DateOfVisit: " + dateOfVisit);
+        System.out.println("Symptoms: " + symptoms);
+        System.out.println("Diagnosis: " + diagnosis);
+    }
 }
