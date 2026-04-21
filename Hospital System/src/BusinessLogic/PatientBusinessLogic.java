@@ -1,116 +1,93 @@
 package BusinessLogic;
 
+import DataAccess.InsuranceDataAccess;
 import DataAccess.PatientDataAccess;
+import DataAccess.PrescriptionDataAccess;
 import Models.Patient;
+import Models.Prescription;
+import PresentationLayer.GetDetails;
+import PresentationLayer.GetIdentifiers;
+import PresentationLayer.RecordAccessGuard;
 import Utilities.Input;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class PatientBusinessLogic
 {
-
-    //Works
-    public static void LoadAllPatients()
-    {
-        int limit = Input.GetInt("Enter a load limit: ");
-
-        List<Patient> patients = PatientDataAccess.loadAllPatients(limit);
-
-        int index = 0;
-        while (index < patients.size())
-        {
-            System.out.println();
-            System.out.println("Patient ID: " + patients.get(index).getPatientID());
-            System.out.println("Patient firstname: " + patients.get(index).getFirstName());
-            System.out.println("Patient surname: " + patients.get(index).getSurname());
-            System.out.println("Patient address: " + patients.get(index).getAddress());
-            System.out.println("Patient phone: " + patients.get(index).getPhone());
-            System.out.println("Patient email: " + patients.get(index).getEmail());
-            index++;
-        }
-    }
-
-    //Works
     public static void AddPatient()
     {
         //Gather details
-        String patientID = Input.GetString("Enter new Patient ID: ");
-        String firstName = Input.GetString("Enter new first name: ");
-        String lastName = Input.GetString("Enter new last name: ");
-        String address = Input.GetString("Enter new address: ");
-        String phone = Input.GetString("Enter new phone number: ");
-        String email = Input.GetString("Enter new email: ");
+        Patient patient = GetDetails.getPatientDetails(false);
 
-        //Create model
-        Patient patient = new Patient(patientID, firstName, lastName, address, phone, email);
+        if(patient == null){System.out.println("Operation cancelled"); return;}
 
         //Add to database
         PatientDataAccess.createPatient(patient);
     }
 
-    //Works
     public static void UpdatePatient()
     {
-        //Get patient ID
-        boolean patientExists = false;
-        String patientID = "";
+        //Gather new details
+        Patient patient = GetDetails.getPatientDetails(true);
 
-        while(true)
-        {
-            patientID = Input.GetString("Enter existing patient ID: "); //Check if it even exists
-            patientExists = PatientDataAccess.ExistsInDatabase(patientID);
+        if(patient == null){System.out.println("Operation cancelled"); return;}
 
-            if(patientExists)
-            {
-                break;
-            }
-            else
-            {
-                System.out.println("Error: Patient id doesn't exist!");
-            }
-        }
-
-        String firstName = Input.GetString("Enter new first name: ");
-        String lastName = Input.GetString("Enter new last name: ");
-        String address = Input.GetString("Enter new address: ");
-        String phone = Input.GetString("Enter new phone number: ");
-        String email = Input.GetString("Enter new email: ");
-
-        //Create new model
-        Patient patient = new Patient(patientID, firstName, lastName, address, phone, email);
-
-        //Update
+        //Update database
         PatientDataAccess.updatePatient(patient);
     }
 
-    //Works
     public static void DeletePatient()
     {
-        boolean patientExists = false;
-        String patientID = "";
+        //Ask for existing id
+        String patientId = GetIdentifiers.getPatientID(true);
 
-        while(!patientExists)
+        //Delete from database
+        PatientDataAccess.deletePatient(patientId);
+    }
+
+    public static void LoadAllPatients()
+    {
+        //Ask for limit
+        int limit =  Input.GetInt("Enter limit: ");
+
+        //Get records and add to list
+        List<Patient> patients = PatientDataAccess.loadAllPatients(limit);
+
+        //Check if there are records
+        if(patients == null || patients.isEmpty())
         {
-            patientID = Input.GetString("Enter existing Patient ID or 0 to exit: "); //Check if it even exists
-
-            if(patientID.equals("0"))
-            {
-                return;
-            }
-
-            patientExists = PatientDataAccess.ExistsInDatabase(patientID);
-
-            if(patientExists)
-            {
-                break;
-            }
-            else
-            {
-                System.out.println("Error: Patient id doesn't exist!");
-            }
+            return;
         }
 
-        //Delete
-        PatientDataAccess.deletePatient(patientID);
+        int index = 0;
+        while(index < patients.size())
+        {
+            Patient patient = patients.get(index);
+            patient.DisplayDetails();
+            index++;
+        }
+    }
+
+    public static void LoadPatientById()
+    {
+        String patientId = GetIdentifiers.getPatientID(true);
+        if(patientId == null){System.out.println("Operation cancelled"); return;}
+
+        Patient patient = PatientDataAccess.GetPatientById(patientId);
+        if(patient == null){System.out.println("Operation cancelled"); return;}
+
+        patient.DisplayDetails();
+    }
+
+    public static void LoadPatientByParameters()
+    {
+        List<Patient> patients = RecordAccessGuard.getPatientByParameters();
+        if(patients == null){System.out.println("Operation cancelled"); return;}
+
+        for (int i = 0; i < patients.size(); i++) {
+
+            patients.get(i).DisplayDetails();
+        }
     }
 }

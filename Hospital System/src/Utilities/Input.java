@@ -75,8 +75,13 @@ public class Input
 
         while (true)
         {
-            System.out.print(message + " (yyyy-MM-dd): ");
+            System.out.print(message);
             String value = input.nextLine();
+
+            if(value.equals("0"))
+            {
+                return null;
+            }
 
             if (value.isEmpty())
             {
@@ -94,5 +99,19 @@ public class Input
                 System.out.println("Invalid date format. Please try again using YYYY-MM-DD.");
             }
         }
+    }
+
+    public static boolean YesNo(String message)
+    {
+        do
+        {
+            String option = GetString(message + "[yes] [no]: ").toLowerCase();
+
+            if(option.equals("yes")){return true;}
+            else if(option.equals("no")){return false;}
+
+            System.out.println("Invalid option. Please try again.");
+        }
+        while(true);
     }
 }

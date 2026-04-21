@@ -93,29 +93,63 @@ public class DrugDataAccess
         return drugs;
     }
 
-    public static boolean ExistsInDatabase(String drugID)
+    public static Drug getDrugById(String drugId)
     {
-        String sql = "SELECT * FROM drugs WHERE drugID = ?";
+        String sql = "SELECT * FROM drugs WHERE drugId = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
-            statement.setString(1, drugID);
+            statement.setString(1, drugId);
+            ResultSet resultSet = statement.executeQuery();
 
-            try (ResultSet resultSet = statement.executeQuery())
+            if(resultSet.next())
             {
-                // if rs.next() is true, a row was found
-                return resultSet.next();
+                return new Drug(
+                        resultSet.getString("drugID"),
+                        resultSet.getString("drugName"),
+                        resultSet.getString("sideEffects"),
+                        resultSet.getString("benefits")
+                );
             }
-            catch (SQLException e)
-            {
-                System.out.println(e.getMessage());
-                return false;
-            }
+
+            return null;
         }
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            return false;
+            return null;
+        }
+    }
+
+    public static List<Drug> getDrugByParameters(String drugName)
+    {
+        List<Drug> drugs = new ArrayList<>();
+
+        String sql = "SELECT * FROM drugs WHERE drugName = ?";
+
+        try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
+        {
+            statement.setString(1, drugName);
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next())
+            {
+                Drug drug = new Drug(
+                        resultSet.getString("drugID"),
+                        resultSet.getString("drugName"),
+                        resultSet.getString("sideEffects"),
+                        resultSet.getString("benefits")
+                );
+
+                drugs.add(drug);
+            }
+
+            return drugs;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 }

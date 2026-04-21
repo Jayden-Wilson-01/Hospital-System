@@ -1,85 +1,46 @@
 package BusinessLogic;
 
+import DataAccess.ConflictDataAccess;
 import DataAccess.DrugDataAccess;
 import Models.Drug;
+import PresentationLayer.GetDetails;
+import PresentationLayer.GetIdentifiers;
+import PresentationLayer.RecordAccessGuard;
 import Utilities.Input;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class DrugBusinessLogic
 {
-    private static Drug GetDetails(boolean includeID)
-    {
-        String drugId = "";
-
-        //Get Details
-        if(includeID) {drugId = GetID(false);}
-        String drugName = Input.GetString("Enter drug name: ");
-        String drugSideEffects = Input.GetString("Enter drug side effects: ");
-        String drugBenefits =  Input.GetString("Enter drug benefits: ");
-
-        //Create new model
-        Drug drug = new Drug();
-
-        //Populate model
-        if(includeID){drug.setDrugID(drugId);}
-        drug.setDrugName(drugName);
-        drug.setSideEffects(drugSideEffects);
-        drug.setBenefits(drugBenefits);
-
-        //Return drug model
-        return drug;
-    }
-
-    private static String GetID(boolean exist)
-    {
-        if(!exist)
-        {
-            while(true)
-            {
-                String doctorID = Input.GetString("Enter drug ID: ");
-
-                exist = DrugDataAccess.ExistsInDatabase(doctorID);
-
-                if(!exist)
-                {
-                    return doctorID;
-                }
-            }
-        }
-        else
-        {
-            while(true)
-            {
-                String doctorID = Input.GetString("Enter drug ID: ");
-
-                exist = DrugDataAccess.ExistsInDatabase(doctorID);
-
-                if(exist)
-                {
-                    return doctorID;
-                }
-            }
-        }
-    }
-
     public static void AddDrug()
     {
-        //Gather details
-        Drug drug = GetDetails(true);
+        //Gather details for the drug
+        Drug drug = GetDetails.getDrugDetails(false);
 
-        //Add to database
+        if(drug == null){System.out.println("Operation cancelled"); return;}
+
+        //Gather details for conflicting id's
+        HashSet<String> conflicts = GetDetails.getConflictDetails();
+
+        //Add drug to database
         DrugDataAccess.createDrug(drug);
+
+        //Add conflict
+        if(conflicts == null){System.out.println("Operation cancelled"); return;}
+
+        for (String conflictId : conflicts)
+        {
+            ConflictDataAccess.addConflict(drug.getDrugID(), conflictId);
+        }
     }
 
     public static void UpdateDrug()
     {
-        //Ask for existing id
-        String drugId  = GetID(true);
+        //Gather details
+        Drug drug = GetDetails.getDrugDetails(true);
 
-        //Gather new details
-        Drug drug = GetDetails(false);
-        drug.setDrugID(drugId);
+        if(drug == null){System.out.println("Operation cancelled"); return;}
 
         //Update database
         DrugDataAccess.updateDrug(drug);
@@ -88,7 +49,9 @@ public class DrugBusinessLogic
     public static void DeleteDrug()
     {
         //Ask for existing id
-        String drugId =  GetID(true);
+        String drugId = GetIdentifiers.getDrugID(true);
+
+        if(drugId == null){System.out.println("Operation cancelled"); return;}
 
         //Delete from database
         DrugDataAccess.deleteDrug(drugId);
@@ -111,6 +74,28 @@ public class DrugBusinessLogic
                 drugs.get(index).DisplayDetails();
                 index++;
             }
+        }
+    }
+
+    public static void LoadDrugById()
+    {
+        String drugId = GetIdentifiers.getDrugID(true);
+        if(drugId == null){System.out.println("Operation cancelled"); return;}
+
+        Drug drug = DrugDataAccess.getDrugById(drugId);
+        if(drug == null){System.out.println("Operation cancelled"); return;}
+
+        drug.DisplayDetails();
+    }
+
+    public static void LoadDrugByParameters()
+    {
+        List<Drug> drugs = RecordAccessGuard.getDrugByParameters();
+        if(drugs == null){System.out.println("Operation cancelled"); return;}
+
+        for (int i = 0; i < drugs.size(); i++)
+        {
+            drugs.get(i).DisplayDetails();
         }
     }
 }

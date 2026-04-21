@@ -1,5 +1,8 @@
 import BusinessLogic.*;
-import Models.Prescription;
+import Models.Drug;
+import PresentationLayer.GetDetails;
+import PresentationLayer.GetIdentifiers;
+import Utilities.Menu;
 
 public class Main
 {
@@ -10,6 +13,8 @@ public class Main
         //InsuranceBusinessLogic.LoadAllInsurance();
         //DrugBusinessLogic.LoadAllDrugs();
         //VisitBusinessLogic.LoadAllVisits();
-        PrescriptionBusinessLogic.LoadAllPrescriptions();
+        //PrescriptionBusinessLogic.LoadAllPrescriptions();
+
+        Menu.MainMenu();
     }
 }

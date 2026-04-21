@@ -6,8 +6,10 @@ import Models.Visit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class VisitDataAccess
 {
@@ -76,7 +78,12 @@ public class VisitDataAccess
     public static List<Visit> loadAllVisits()
     {
         List<Visit> visits = new ArrayList<>();
-        String sql = "SELECT * FROM visits";
+        String sql = "SELECT vis.*, " +
+                "CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, " +
+                "CONCAT(pat.firstname, ' ', pat.surname) AS patientName "+
+                "FROM visits vis " +
+                "JOIN doctors doc ON vis.doctorID = doc.doctorID " +
+                "JOIN patients pat ON vis.patientID = pat.patientID ";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql); ResultSet resultSet = statement.executeQuery())
         {
@@ -91,6 +98,9 @@ public class VisitDataAccess
                         resultSet.getString("diagnosis")
                 );
 
+                visit.setPatientName(resultSet.getString("patientName"));
+                visit.setDoctorName(resultSet.getString("doctorName"));
+
                 visits.add(visit);
             }
         }
@@ -103,29 +113,89 @@ public class VisitDataAccess
         return visits;
     }
 
-    public static boolean ExistsInDatabase(String visitId)
+    public static Visit getVisitById(String visitId)
     {
-        String sql = "SELECT * FROM visits WHERE visitId = ?";
+        String sql = "SELECT vis.*, CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, CONCAT(pat.firstname, ' ', pat.surname) AS patientName FROM visits vis JOIN doctors doc ON vis.doctorID = doc.doctorID JOIN patients pat ON vis.patientID = pat.patientID WHERE visitId = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
             statement.setString(1, visitId);
 
-            try (ResultSet resultSet = statement.executeQuery())
+            try(ResultSet resultSet = statement.executeQuery())
             {
-                // if rs.next() is true, a row was found
-                return resultSet.next();
+                if (resultSet.next())
+                {
+
+                    return new Visit(
+                            resultSet.getString("visitID"),
+                            resultSet.getString("patientID"),
+                            resultSet.getString("doctorID"),
+                            resultSet.getDate("dateOfVisit").toLocalDate(),
+                            resultSet.getString("symptoms"),
+                            resultSet.getString("diagnosis"),
+                            resultSet.getString("patientName"),
+                            resultSet.getString("doctorName")
+                    );
+                }
+
+                return null;
             }
             catch (SQLException e)
             {
                 System.out.println(e.getMessage());
-                return false;
+                return null;
             }
         }
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            return false;
+            return null;
+        }
+    }
+
+    public static List<Visit> getVisitByParameters(String patientFirstname, String patientSurname, String doctorFirstname, String  doctorSurname)
+    {
+        List<Visit> visits = new ArrayList<>();
+
+        String sql = "SELECT vis.*, CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, CONCAT(pat.firstname, ' ', pat.surname) AS patientName FROM visits vis LEFT JOIN doctors doc ON vis.doctorID = doc.doctorID LEFT JOIN patients pat ON vis.patientID = pat.patientID WHERE pat.firstname = ? AND pat.surname = ? AND doc.surname = ? AND doc.surname = ?";
+
+        try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
+        {
+            statement.setString(1, patientFirstname);
+            statement.setString(2, patientSurname);
+            statement.setString(3, doctorFirstname);
+            statement.setString(4, doctorSurname);
+
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                while (resultSet.next())
+                {
+                    Visit visit = new Visit(
+                            resultSet.getString("visitID"),
+                            resultSet.getString("patientID"),
+                            resultSet.getString("doctorID"),
+                            resultSet.getDate("dateOfVisit").toLocalDate(),
+                            resultSet.getString("symptoms"),
+                            resultSet.getString("diagnosis"),
+                            resultSet.getString("patientName"),
+                            resultSet.getString("doctorName")
+                    );
+
+                    visits.add(visit);
+                }
+
+                return visits;
+            }
+            catch (SQLException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 }

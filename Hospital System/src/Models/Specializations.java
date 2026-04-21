@@ -26,4 +26,9 @@ public class Specializations
     {
         return  SpecializationType.values().length;
     }
+
+    public static String GetSpecializationType(int choice)
+    {
+        return SpecializationType.values()[choice - 1].toString();
+    }
 }

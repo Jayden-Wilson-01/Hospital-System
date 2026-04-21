@@ -95,29 +95,63 @@ public class InsuranceDataAccess
         return insurances;
     }
 
-    public static boolean ExistsInDatabase(String insuranceID)
+    public static Insurance getInsuranceById(String insuranceID)
     {
-        String sql = "SELECT 1 FROM insurance WHERE insuranceID = ?";
+        String sql = "SELECT * FROM insurance WHERE insuranceID = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
             statement.setString(1, insuranceID);
+            ResultSet resultSet = statement.executeQuery();
 
-            try (ResultSet resultSet = statement.executeQuery())
+            if (resultSet.next())
             {
-                // if rs.next() is true, a row was found
-                return resultSet.next();
+                return new Insurance(
+                        resultSet.getString("insuranceID"),
+                        resultSet.getString("company"),
+                        resultSet.getString("address"),
+                        resultSet.getString("phone")
+                );
             }
-            catch (SQLException e)
-            {
-                System.out.println(e.getMessage());
-                return false;
-            }
+
+            return null;
         }
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            return false;
+            return null;
+        }
+    }
+
+    public static List<Insurance> getInsuranceByParameters(String insuranceCompanyName)
+    {
+        List<Insurance> insurances = new ArrayList<>();
+
+        String sql = "SELECT * FROM insurance WHERE company = ?";
+
+        try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
+        {
+            statement.setString(1, insuranceCompanyName);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+            {
+                Insurance insurance = new Insurance(
+                        resultSet.getString("insuranceID"),
+                        resultSet.getString("company"),
+                        resultSet.getString("address"),
+                        resultSet.getString("phone")
+                );
+
+                insurances.add(insurance);
+            }
+
+            return insurances;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 }

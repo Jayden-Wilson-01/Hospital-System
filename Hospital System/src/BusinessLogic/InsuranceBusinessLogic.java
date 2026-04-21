@@ -1,74 +1,25 @@
 package BusinessLogic;
 
 import DataAccess.InsuranceDataAccess;
+import DataAccess.PatientDataAccess;
+import Models.Doctor;
 import Models.Insurance;
+import Models.Patient;
+import PresentationLayer.GetDetails;
+import PresentationLayer.GetIdentifiers;
+import PresentationLayer.RecordAccessGuard;
 import Utilities.Input;
 
 import java.util.List;
 
 public class InsuranceBusinessLogic
 {
-    private static Insurance GetDetails(boolean includeID)
-    {
-        String insuranceId = "";
-
-        if(includeID)
-        {
-            insuranceId = GetID(false);
-        }
-
-        String company = Input.GetString("Enter company name: ");
-        String address = Input.GetString("Enter address: ");
-        String phone = Input.GetString("Enter phone: ");
-
-        //Create new model
-        Insurance insurance = new Insurance();
-
-        //Assign values
-        if(includeID) {insurance.setInsuranceID(insuranceId);}
-        insurance.setCompany(company);
-        insurance.setAddress(address);
-        insurance.setPhone(phone);
-
-        return insurance;
-    }
-
-    private static String GetID(boolean exist)
-    {
-        if(!exist)
-        {
-            while(true)
-            {
-                String doctorID = Input.GetString("Enter insurance ID: ");
-
-                exist = InsuranceDataAccess.ExistsInDatabase(doctorID);
-
-                if(!exist)
-                {
-                    return doctorID;
-                }
-            }
-        }
-        else
-        {
-            while(true)
-            {
-                String doctorID = Input.GetString("Enter insurance ID: ");
-
-                exist = InsuranceDataAccess.ExistsInDatabase(doctorID);
-
-                if(exist)
-                {
-                    return doctorID;
-                }
-            }
-        }
-    }
-
     public static void AddInsurance()
     {
         //Gather details
-        Insurance insurance = GetDetails(true);
+        Insurance insurance = GetDetails.getInsuranceDetails(false);
+
+        if(insurance == null){System.out.println("Operation Cancelled"); return;}
 
         //Add to database
         InsuranceDataAccess.createInsurance(insurance);
@@ -76,21 +27,20 @@ public class InsuranceBusinessLogic
 
     public static void UpdateInsurance()
     {
-        //As we are updating an existing insurance we need an existing id
-        String insuranceID = GetID(true);
+        //Gather details
+        Insurance insurance = GetDetails.getInsuranceDetails(true);
 
-        //We have already asked for the id so we don't need to include it again, but we still need to set it
-        Insurance insurance = GetDetails(false);
-        insurance.setInsuranceID(insuranceID);
+        if(insurance == null){System.out.println("Operation Cancelled"); return;}
 
-        //Update from database
+        //Update database
         InsuranceDataAccess.updateInsurance(insurance);
     }
 
     public static void DeleteInsurance()
     {
         //Get id of existing insurance record
-        String insuranceID = GetID(true);
+        String insuranceID = GetIdentifiers.getInsuranceID(true);
+        if(insuranceID == null){System.out.println("Operation Cancelled"); return;}
 
         //Delete from database
         InsuranceDataAccess.deleteInsurance(insuranceID);
@@ -113,6 +63,28 @@ public class InsuranceBusinessLogic
                 insurance.get(index).DisplayDetails();
                 index++;
             }
+        }
+    }
+
+    public static void LoadInsuranceById()
+    {
+        String insuranceId = GetIdentifiers.getInsuranceID(true);
+        if(insuranceId == null){System.out.println("Operation cancelled"); return;}
+
+        Insurance insurance = InsuranceDataAccess.getInsuranceById(insuranceId);
+        if(insurance == null){System.out.println("Operation cancelled"); return;}
+
+        insurance.DisplayDetails();
+    }
+
+    public static void LoadInsuranceByParameters()
+    {
+        List<Insurance> insurances = RecordAccessGuard.getInsuranceByParameters();
+        if(insurances == null){System.out.println("Operation cancelled"); return;}
+
+        for (int i = 0; i < insurances.size(); i++)
+        {
+            insurances.get(i).DisplayDetails();
         }
     }
 }

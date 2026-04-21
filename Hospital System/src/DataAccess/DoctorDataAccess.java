@@ -147,67 +147,145 @@ public class DoctorDataAccess
         return doctors;
     }
 
-    public static boolean ExistsInDatabase(String doctorID)
+    public static Doctor getDoctorById(String doctorID)
     {
+
         String sql = "SELECT * FROM doctors WHERE doctorID = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
             statement.setString(1, doctorID);
+            ResultSet rs = statement.executeQuery();
 
-            try (ResultSet resultSet = statement.executeQuery())
+            if(rs.next())
             {
-                // if rs.next() is true, a row was found
-                return resultSet.next();
-            }
-            catch (SQLException e)
-            {
-                System.out.println(e.getMessage());
-                return false;
+                // Logic to determine if this row is a Specialist or a Doctor
+                String specialistString = rs.getString("specialization");
+
+                if (specialistString != null && !specialistString.isEmpty())
+                {
+                    return new Specialist(
+                            rs.getString("doctorID"),
+                            rs.getString("firstname"),
+                            rs.getString("surname"),
+                            rs.getString("address"),
+                            rs.getString("email"),
+                            rs.getString("hospital"),
+                            rs.getString("specialization"),
+                            rs.getInt("experience")
+                    );
+                }
+                else
+                {
+                    return new Doctor(
+                            rs.getString("doctorID"),
+                            rs.getString("firstname"),
+                            rs.getString("surname"),
+                            rs.getString("address"),
+                            rs.getString("email"),
+                            rs.getString("hospital")
+                    );
+                }
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
-            return false;
+            System.err.println(e.getMessage());
+            return null;
         }
+
+        return null;
     }
 
-    public static String GetDoctorTypeByID(String doctorID)
+    public static List<Doctor> getDoctorByParameters(String firstname, String surname)
     {
-        String sql = "SELECT specialization FROM doctors WHERE doctorID = ?";
+        List<Doctor> doctors = new ArrayList<>();
+
+        String sql = "SELECT * FROM doctors WHERE firstname =  ? AND surname = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
-            statement.setString(1, doctorID);
+            statement.setString(1, firstname);
+            statement.setString(2, surname);
+            ResultSet rs = statement.executeQuery();
 
-            try (ResultSet resultSet = statement.executeQuery())
+            while(rs.next())
             {
-                // if rs.next() is true, a row was found
-                if(resultSet.next())
+                // Logic to determine if this row is a Specialist or a Doctor
+                String specialistString = rs.getString("specialization");
+
+                if (specialistString != null && !specialistString.isEmpty())
                 {
-                    if(resultSet.getString("specialization") == null)
-                    {
-                        return "Standard";
-                    }
-                    else
-                    {
-                        return "Specialist";
-                    }
+                    Specialist specialist = new  Specialist(
+                            rs.getString("doctorID"),
+                            rs.getString("firstname"),
+                            rs.getString("surname"),
+                            rs.getString("address"),
+                            rs.getString("email"),
+                            rs.getString("hospital"),
+                            rs.getString("specialization"),
+                            rs.getInt("experience")
+                    );
+
+                    doctors.add(specialist);
+                }
+                else
+                {
+                    Doctor doctor = new Doctor(
+                            rs.getString("doctorID"),
+                            rs.getString("firstname"),
+                            rs.getString("surname"),
+                            rs.getString("address"),
+                            rs.getString("email"),
+                            rs.getString("hospital")
+                    );
+
+                    doctors.add(doctor);
                 }
             }
-            catch (SQLException e)
-            {
-                System.out.println(e.getMessage());
-                return "Standard";
-            }
+
+            return doctors;
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
-            return "Standard";
+            System.err.println(e.getMessage());
+            return null;
         }
+    }
 
-        return "Standard";
+    public static List<Doctor> getDoctorBySpeciality(String specialization)
+    {
+        List<Doctor> doctors = new ArrayList<>();
+
+        String sql = "SELECT * FROM doctors WHERE specialization =  ?";
+
+        try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
+        {
+            statement.setString(1, specialization);
+            ResultSet rs = statement.executeQuery();
+
+            while(rs.next())
+            {
+                Specialist specialist = new  Specialist(
+                        rs.getString("doctorID"),
+                        rs.getString("firstname"),
+                        rs.getString("surname"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("hospital"),
+                        rs.getString("specialization"),
+                        rs.getInt("experience")
+                );
+
+                doctors.add(specialist);
+            }
+
+            return doctors;
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 }
