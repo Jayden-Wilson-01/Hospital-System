@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PrescriptionDataAccess
@@ -167,6 +168,39 @@ public class PrescriptionDataAccess
             }
 
             return null;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static HashSet<String> getDrugIdByPatientId(String prescriptionId)
+    {
+        String sql = "SELECT drugID FROM prescriptions WHERE patientID = ?";
+
+        try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
+        {
+            //used a hashset in the event that there are duplicated drug id's;
+            HashSet<String> drugIds = new  HashSet<>();
+
+            statement.setString(1, prescriptionId);
+
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                while (resultSet.next())
+                {
+                    drugIds.add(resultSet.getString("drugID"));
+                }
+
+                return drugIds;
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
         catch (SQLException e)
         {

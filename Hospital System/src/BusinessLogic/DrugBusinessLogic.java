@@ -13,6 +13,9 @@ import java.util.List;
 
 public class DrugBusinessLogic
 {
+    /**
+     * Adds a new drug by gathering details then transferring model to database to be added
+     */
     public static void AddDrug()
     {
         //Gather details for the drug
@@ -20,43 +23,55 @@ public class DrugBusinessLogic
 
         if(drug == null){System.out.println("Operation cancelled"); return;}
 
-        //Gather details for conflicting id's
+        //Gather details of  existing drugs that conflict with the drug being added
         HashSet<String> conflicts = GetDetails.getConflictDetails();
 
         //Add drug to database
         DrugDataAccess.createDrug(drug);
 
-        //Add conflict
+        //Check if there are ant conflicts to add
         if(conflicts == null){System.out.println("Operation cancelled"); return;}
 
+        //Add conflict
         for (String conflictId : conflicts)
         {
             ConflictDataAccess.addConflict(drug.getDrugID(), conflictId);
         }
     }
 
+    /**
+     * Update existing drug and gather the new details to update teh database
+     */
     public static void UpdateDrug()
     {
-        //Gather details
+        //Create a new drug model with the updated details
         Drug drug = GetDetails.getDrugDetails(true);
 
+        //Check if drug exists
         if(drug == null){System.out.println("Operation cancelled"); return;}
 
         //Update database
         DrugDataAccess.updateDrug(drug);
     }
 
+    /**
+     * Delete existing drug based on provided id
+     */
     public static void DeleteDrug()
     {
-        //Ask for existing id
+        //Get existing drug id
         String drugId = GetIdentifiers.getDrugID(true);
 
+        //Check drug id exists
         if(drugId == null){System.out.println("Operation cancelled"); return;}
 
         //Delete from database
         DrugDataAccess.deleteDrug(drugId);
     }
 
+    /**
+     * Get all drug details based on limit
+     */
     public static void LoadAllDrugs()
     {
         //Ask for limit
@@ -77,22 +92,33 @@ public class DrugBusinessLogic
         }
     }
 
+    /**
+     * Get details of drug based on id
+     */
     public static void LoadDrugById()
     {
+        //Get existing drug id
         String drugId = GetIdentifiers.getDrugID(true);
         if(drugId == null){System.out.println("Operation cancelled"); return;}
 
+        //Create drug model based on existing drug and id
         Drug drug = DrugDataAccess.getDrugById(drugId);
         if(drug == null){System.out.println("Operation cancelled"); return;}
 
+        //Display details of existing drug
         drug.DisplayDetails();
     }
 
+    /**
+     * Display drug details based on parameters
+     */
     public static void LoadDrugByParameters()
     {
+        //get list of found drugs based on parameters
         List<Drug> drugs = RecordAccessGuard.getDrugByParameters();
         if(drugs == null){System.out.println("Operation cancelled"); return;}
 
+        //Display details of each found drug
         for (int i = 0; i < drugs.size(); i++)
         {
             drugs.get(i).DisplayDetails();

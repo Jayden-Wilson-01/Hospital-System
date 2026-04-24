@@ -1,5 +1,7 @@
 package PresentationLayer;
 
+import BusinessLogic.ConflictBusinessLogic;
+import BusinessLogic.PrescriptionBusinessLogic;
 import Models.*;
 import Utilities.Input;
 
@@ -22,6 +24,14 @@ public class GetDetails
             if(insuranceID == null){return null;}
         }
 
+        String doctorID = null;
+        boolean includeDoctor = Input.YesNo("Include primary doctor? ");
+        if(includeDoctor)
+        {
+            doctorID = GetIdentifiers.getDoctorID(true);
+            if(doctorID == null){return null;}
+        }
+
         String firstname = Input.GetString("Enter patients firstname or 0 to cancel: ");
         if(firstname.equals("0")){return null;}
 
@@ -38,7 +48,7 @@ public class GetDetails
         if(email.equals("0")){return null;}
 
         //Create and return model
-        return new Patient(patientID, insuranceID, firstname, surname, null, address, phone, email);
+        return new Patient(patientID, insuranceID, doctorID, firstname, surname, null, address, phone, email);
     }
 
     public static Doctor getDoctorDetails(boolean doctorExists)
@@ -165,14 +175,31 @@ public class GetDetails
         String prescriptionId = GetIdentifiers.getPrescriptionID(prescriptionExists);
         if(prescriptionId == null){return null;}
 
-        String drugId = GetIdentifiers.getDrugID(true);
-        if(drugId == null){return null;}
-
-        String doctorId = GetIdentifiers.getDoctorID(true);
-        if(doctorId == null){return null;}
 
         String patientId = GetIdentifiers.getPatientID(true);
         if(patientId == null){return null;}
+
+        String drugId = null;
+
+        do
+        {
+            drugId = GetIdentifiers.getDrugID(true);
+            if(drugId == null){return null;}
+
+            //Check if drug conflicts, if it does return;
+            String conflictID = ConflictBusinessLogic.findActiveConflict(drugId, patientId);
+
+            if (conflictID == null)
+            {
+                break;
+            }
+
+            System.out.println("Conflict Found");
+        }
+        while (true);
+
+        String doctorId = GetIdentifiers.getDoctorID(true);
+        if(doctorId == null){return null;}
 
         LocalDate datePrescribed = Input.GetDate("Enter prescription date (yyyy-mm-dd) or 0 to exit: ");
         if(datePrescribed == null){return null;}

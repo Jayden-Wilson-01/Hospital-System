@@ -114,4 +114,9 @@ public class Input
         }
         while(true);
     }
+
+    public static String combineStrings(String firstString,  String secondString)
+    {
+        return (firstString +  " " + secondString);
+    }
 }

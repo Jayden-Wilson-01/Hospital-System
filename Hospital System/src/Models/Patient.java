@@ -8,6 +8,9 @@ public class Patient
     private String patientID;
     private String insuranceID;
     private String insuranceCompany;
+    private String doctorID;
+    private String doctorFirstname;
+    private String doctorSurname;
 
     //Properties
     private String firstName;
@@ -20,10 +23,11 @@ public class Patient
     private String email;
 
     //Constructor
-    public Patient(String patientID, String insuranceID, String firstName, String surname, String postcode, String address, String phone, String email)
+    public Patient(String patientID, String insuranceID, String doctorID, String firstName, String surname, String postcode, String address, String phone, String email)
     {
         this.patientID = Input.RequireNonNull(patientID);
         this.insuranceID = insuranceID;
+        this.doctorID = doctorID;
         this.firstName = Input.RequireNonNull(firstName);
         this.surname = Input.RequireNonNull(surname);
         this.postcode = postcode;
@@ -32,10 +36,11 @@ public class Patient
         this.email = Input.RequireNonNull(email);
     }
 
-    public Patient(String patientID, String insuranceID, String firstName, String surname, String postcode, String address, String phone,  String email, String insuranceCompany)
+    public Patient(String patientID, String insuranceID, String doctorID, String firstName, String surname, String postcode, String address, String phone,  String email, String insuranceCompany, String doctorFirstname, String doctorSurname)
     {
         this.patientID = Input.RequireNonNull(patientID);
         this.insuranceID = insuranceID;
+        this.doctorID = doctorID;
         this.firstName = Input.RequireNonNull(firstName);
         this.surname = Input.RequireNonNull(surname);
         this.postcode = postcode;
@@ -43,6 +48,8 @@ public class Patient
         this.phone = Input.RequireNonNull(phone);
         this.email = Input.RequireNonNull(email);
         this.insuranceCompany = insuranceCompany;
+        this.doctorFirstname = doctorFirstname;
+        this.doctorSurname = doctorSurname;
     }
 
     public Patient (String firstName, String surname)
@@ -54,6 +61,9 @@ public class Patient
     //Getters
     public String getInsuranceID() {return insuranceID;}
     public String getInsuranceCompany() {return insuranceCompany;}
+    public String getDoctorID() {return doctorID;}
+    public String getDoctorFirstname() {return doctorFirstname;}
+    public String getDoctorSurname() {return doctorSurname;}
     public String getPatientID() {return patientID;}
     public String getFirstName() {return firstName;}
     public String getSurname() {return surname;}
@@ -75,7 +85,8 @@ public class Patient
     public void DisplayDetails()
     {
         System.out.println("\nPatient ID: " + patientID);
-        System.out.println("Insurance Info: \n\tID:" + insuranceID + "\n\tName: " + insuranceCompany);
+        System.out.println("Insurance Info: \n\tID: " + insuranceID + "\n\tName: " + insuranceCompany);
+        System.out.println("Primary Doctor Info: \n\tID: " + doctorID + "\n\tName: " + Input.combineStrings(doctorFirstname, doctorSurname));
         System.out.println("Patient firstname: " + firstName);
         System.out.println("Patient surname: " + surname);
         System.out.println("Patient address: " + postcode + " " + address);

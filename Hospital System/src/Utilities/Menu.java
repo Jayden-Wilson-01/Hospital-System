@@ -271,6 +271,9 @@ public class Menu
                 case 5:
                     VisitBusinessLogic.LoadVisitById();
                     break;
+                case 6:
+                    VisitBusinessLogic.LoadVisitByParameters();
+                    break;
             }
         }
         while(true);

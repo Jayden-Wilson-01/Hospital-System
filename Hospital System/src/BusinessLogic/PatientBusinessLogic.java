@@ -15,6 +15,9 @@ import java.util.List;
 
 public class PatientBusinessLogic
 {
+    /**
+     * Add new patient by gathering new details and adding to database
+     */
     public static void AddPatient()
     {
         //Gather details
@@ -26,6 +29,9 @@ public class PatientBusinessLogic
         PatientDataAccess.createPatient(patient);
     }
 
+    /**
+     * Update existing patient by gathering new details and updating database
+     */
     public static void UpdatePatient()
     {
         //Gather new details
@@ -37,15 +43,21 @@ public class PatientBusinessLogic
         PatientDataAccess.updatePatient(patient);
     }
 
+    /**
+     * Delete existing patient based on provided id
+     */
     public static void DeletePatient()
     {
-        //Ask for existing id
+        //Get existing patient id
         String patientId = GetIdentifiers.getPatientID(true);
 
         //Delete from database
         PatientDataAccess.deletePatient(patientId);
     }
 
+    /**
+     * Display details of each patient based on provided limit
+     */
     public static void LoadAllPatients()
     {
         //Ask for limit
@@ -60,6 +72,7 @@ public class PatientBusinessLogic
             return;
         }
 
+        //Show details of each patient
         int index = 0;
         while(index < patients.size())
         {
@@ -69,22 +82,33 @@ public class PatientBusinessLogic
         }
     }
 
+    /**
+     * Display details of patient based on id
+     */
     public static void LoadPatientById()
     {
+        //Get existing patient id
         String patientId = GetIdentifiers.getPatientID(true);
         if(patientId == null){System.out.println("Operation cancelled"); return;}
 
+        //Create patient model and populate with details of found patient
         Patient patient = PatientDataAccess.GetPatientById(patientId);
         if(patient == null){System.out.println("Operation cancelled"); return;}
 
+        //Show details of found patient
         patient.DisplayDetails();
     }
 
+    /**
+     * Display details of patients based on parameters
+     */
     public static void LoadPatientByParameters()
     {
+        //create a list of patients found based on provided parameters
         List<Patient> patients = RecordAccessGuard.getPatientByParameters();
         if(patients == null){System.out.println("Operation cancelled"); return;}
 
+        //Show details of each patient
         for (int i = 0; i < patients.size(); i++) {
 
             patients.get(i).DisplayDetails();
