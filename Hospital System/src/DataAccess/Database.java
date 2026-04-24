@@ -7,6 +7,10 @@ import java.sql.SQLException;
 
 public class Database
 {
+    /**
+     * The database Connection string
+     * @return the connection to the database via a URL
+     */
     public static Connection getConnection()
     {
         String url = "jdbc:mariadb://localhost:3306/healthcare";

@@ -10,13 +10,17 @@ import java.util.List;
 
 public class DrugDataAccess
 {
+    /**
+     * Create a new drug directly in the database
+     * @param drug the new drug model with the new details
+     */
     public static void createDrug(Drug drug)
     {
-        //remove drugID as drugID is automatically assigned by the database via AUTO_INCREMENT?
         String sql = "INSERT INTO drugs (drugID, drugName, sideEffects, benefits) VALUES (?, ?, ?, ?)";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
             statement.setString(1, drug.getDrugID());
             statement.setString(2, drug.getDrugName());
             statement.setString(3, drug.getSideEffects());
@@ -29,12 +33,17 @@ public class DrugDataAccess
         }
     }
 
+    /**
+     * Update an existing drug directly from the database
+     * @param drug the drug model with the updated details
+     */
     public static void updateDrug(Drug drug)
     {
         String sql = "UPDATE drugs SET drugName = ?, sideEffects = ?, benefits = ? WHERE drugID = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
             statement.setString(1, drug.getDrugName());
             statement.setString(2, drug.getSideEffects());
             statement.setString(3, drug.getBenefits());
@@ -47,12 +56,17 @@ public class DrugDataAccess
         }
     }
 
+    /**
+     * Delete an existing drug directly from the database
+     * @param drugID the existing drugs id
+     */
     public static void deleteDrug(String drugID)
     {
         String sql = "DELETE FROM drugs WHERE drugID = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
             statement.setString(1, drugID);
             statement.execute();
         }
@@ -62,6 +76,11 @@ public class DrugDataAccess
         }
     }
 
+    /**
+     * Gets the details of all drugs within a provided limit
+     * @param limit The limit of how many drug details to fetch from the database
+     * @return a list of the drug models with populated details
+     */
     public static List<Drug> loadAllDrugs(int limit)
     {
         List<Drug> drugs = new ArrayList<>();
@@ -69,11 +88,13 @@ public class DrugDataAccess
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
             statement.setInt(1, limit);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next())
             {
+                //Create a new drug model
                 Drug drug = new Drug(
                         resultSet.getString("drugID"),
                         resultSet.getString("drugName"),
@@ -93,17 +114,24 @@ public class DrugDataAccess
         return drugs;
     }
 
+    /**
+     * Get details of an existing drug based on provided id
+     * @param drugId The id of the existing drug
+     * @return A singular drug model
+     */
     public static Drug getDrugById(String drugId)
     {
         String sql = "SELECT * FROM drugs WHERE drugId = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
             statement.setString(1, drugId);
             ResultSet resultSet = statement.executeQuery();
 
             if(resultSet.next())
             {
+                //Create a new drug model
                 return new Drug(
                         resultSet.getString("drugID"),
                         resultSet.getString("drugName"),
@@ -121,6 +149,11 @@ public class DrugDataAccess
         }
     }
 
+    /**
+     * Get details of each drug found with the same parameters
+     * @param drugName First parameter: The name of the drug
+     * @return A list of each drug that matches the same parameter
+     */
     public static List<Drug> getDrugByParameters(String drugName)
     {
         List<Drug> drugs = new ArrayList<>();
@@ -129,11 +162,13 @@ public class DrugDataAccess
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
             statement.setString(1, drugName);
             ResultSet resultSet = statement.executeQuery();
 
             while(resultSet.next())
             {
+                //Create new drug model
                 Drug drug = new Drug(
                         resultSet.getString("drugID"),
                         resultSet.getString("drugName"),

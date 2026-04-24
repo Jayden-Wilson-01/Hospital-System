@@ -13,6 +13,10 @@ import java.util.List;
 
 public class PrescriptionDataAccess
 {
+    /**
+     * Create a new prescription directly in the database
+     * @param prescription the new prescription model with the new details
+     */
     public static void createPrescription(Prescription prescription)
     {
         //remove prescriptionID as prescriptionID is automatically assigned by the database via AUTO_INCREMENT?
@@ -39,6 +43,10 @@ public class PrescriptionDataAccess
         }
     }
 
+    /**
+     * Update an existing prescription directly from the database
+     * @param prescription the prescription model with the updated details
+     */
     public static void updatePrescription(Prescription prescription)
     {
         String sql = "UPDATE prescriptions SET drugID = ?, doctorID = ?, patientID = ?, datePrescribed = ?, dosage = ?, duration = ?, comment = ? WHERE prescriptionID = ?";
@@ -64,6 +72,10 @@ public class PrescriptionDataAccess
         }
     }
 
+    /**
+     * Delete an existing prescription directly from the database
+     * @param prescriptionId the existing prescriptions id
+     */
     public static void deletePrescription(String prescriptionId)
     {
         String sql = "DELETE FROM prescriptions WHERE prescriptionID = ?";
@@ -79,22 +91,27 @@ public class PrescriptionDataAccess
         }
     }
 
-    public static List<Prescription> loadAllPrescriptions()
+    /**
+     * Gets the details of all prescriptions within a provided limit
+     * @param limit The limit of how many prescription details to fetch from the database
+     * @return a list of the prescription models with populated details
+     */
+    public static List<Prescription> loadAllPrescriptions(int limit)
     {
         List<Prescription> prescriptions = new ArrayList<>();
-        String sql = "SELECT pre.*, " +
-                "CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, " +
-                "CONCAT(pat.firstname, ' ', pat.surname) AS patientName, " +
-                "drug.drugname " +
-                "FROM prescriptions pre " +
-                "JOIN doctors doc ON pre.doctorID = doc.doctorID " +
-                "JOIN patients pat ON pre.patientID = pat.patientID " +
-                "JOIN drugs drug ON pre.drugID = drug.drugID";
 
-        try(PreparedStatement statement = Database.getConnection().prepareStatement(sql); ResultSet resultSet = statement.executeQuery())
+        //Gets required details from multiple tables e.g. doctors name, patients name
+        String sql = "SELECT pre.*, CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, CONCAT(pat.firstname, ' ', pat.surname) AS patientName, drug.drugname FROM prescriptions pre JOIN doctors doc ON pre.doctorID = doc.doctorID JOIN patients pat ON pre.patientID = pat.patientID JOIN drugs drug ON pre.drugID = drug.drugID LIMIT ?";
+
+        try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
+            statement.setInt(1, limit);
+            ResultSet resultSet = statement.executeQuery();
+
             while (resultSet.next())
             {
+                //Create new prescription
                 Prescription prescription = new Prescription(
                         resultSet.getString("prescriptionID"),
                         resultSet.getString("drugID"),
@@ -103,12 +120,11 @@ public class PrescriptionDataAccess
                         resultSet.getDate("datePrescribed").toLocalDate(),
                         resultSet.getInt("dosage"),
                         resultSet.getInt("duration"),
-                        resultSet.getString("comment")
+                        resultSet.getString("comment"),
+                        resultSet.getString(resultSet.getString("doctorName")),
+                        resultSet.getString(resultSet.getString("patientName")),
+                        resultSet.getString(resultSet.getString("drugName"))
                 );
-
-                prescription.setDoctorName(resultSet.getString("doctorName"));
-                prescription.setPatientName(resultSet.getString("patientName"));
-                prescription.setDrugName(resultSet.getString("drugName"));
 
                 prescriptions.add(prescription);
             }
@@ -122,43 +138,38 @@ public class PrescriptionDataAccess
         return prescriptions;
     }
 
+    /**
+     * Get details of an existing prescription based on provided id
+     * @param prescriptionId The id of the existing prescription
+     * @return A singular prescription model
+     */
     public static Prescription getPrescriptionById(String prescriptionId)
     {
-        String sql = "SELECT pre.*, " +
-                "CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, " +
-                "CONCAT(pat.firstname, ' ', pat.surname) AS patientName, " +
-                "drug.drugname " +
-                "FROM prescriptions pre " +
-                "JOIN doctors doc ON pre.doctorID = doc.doctorID " +
-                "JOIN patients pat ON pre.patientID = pat.patientID " +
-                "JOIN drugs drug ON pre.drugID = drug.drugID " +
-                "WHERE pre.prescriptionID = ?";
+        String sql = "SELECT pre.*, CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, CONCAT(pat.firstname, ' ', pat.surname) AS patientName, drug.drugname FROM prescriptions pre JOIN doctors doc ON pre.doctorID = doc.doctorID JOIN patients pat ON pre.patientID = pat.patientID JOIN drugs drug ON pre.drugID = drug.drugID WHERE pre.prescriptionID = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
+            //Set the statement parameters using the according details
             statement.setString(1, prescriptionId);
 
             try(ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next())
                 {
-                    Prescription prescription = new Prescription();
-
-                    prescription.setPrescriptionID(resultSet.getString("prescriptionID"));
-                    prescription.setDrugID(resultSet.getString("drugID"));
-                    prescription.setDoctorID(resultSet.getString("doctorID"));
-                    prescription.setPatientID(resultSet.getString("patientID"));
-                    prescription.setDatePrescribed(resultSet.getDate("datePrescribed").toLocalDate());
-                    prescription.setDosage(resultSet.getInt("dosage"));
-                    prescription.setDuration(resultSet.getInt("duration"));
-                    prescription.setComment(resultSet.getString("comment"));
-
-                    //From the join
-                    prescription.setDoctorName(resultSet.getString("doctorName"));
-                    prescription.setPatientName(resultSet.getString("patientName"));
-                    prescription.setDrugName(resultSet.getString("drugName"));
-
-                    return prescription;
+                    //Create new prescription
+                    return new Prescription(
+                            resultSet.getString("prescriptionID"),
+                            resultSet.getString("drugID"),
+                            resultSet.getString("doctorID"),
+                            resultSet.getString("patientID"),
+                            resultSet.getDate("datePrescribed").toLocalDate(),
+                            resultSet.getInt("dosage"),
+                            resultSet.getInt("duration"),
+                            resultSet.getString("comment"),
+                            resultSet.getString(resultSet.getString("doctorName")),
+                            resultSet.getString(resultSet.getString("patientName")),
+                            resultSet.getString(resultSet.getString("drugName"))
+                    );
                 }
             }
             catch (Exception e)
@@ -176,6 +187,11 @@ public class PrescriptionDataAccess
         }
     }
 
+    /**
+     * Gets a list of drugs a patient is prescribed
+     * @param prescriptionId the id of the prescription
+     * @return A list of drug id's the patient is prescribed
+     */
     public static HashSet<String> getDrugIdByPatientId(String prescriptionId)
     {
         String sql = "SELECT drugID FROM prescriptions WHERE patientID = ?";
@@ -209,6 +225,14 @@ public class PrescriptionDataAccess
         }
     }
 
+    /**
+     * Get details of each prescription found with the same parameters
+     * @param patientFirstname First parameter: The firstname of the patient
+     * @param patientSurname Second parameter: The surname of the patient
+     * @param doctorFirstname Third parameter: The firstname of the doctor
+     * @param doctorSurname Forth parameter: The surname of the doctor
+     * @return A list of each prescription that matches the same parameter
+     */
     public static List<Prescription> getPrescriptionByParameters(String patientFirstname, String patientSurname, String doctorFirstname, String doctorSurname)
     {
         List<Prescription> prescriptions = new ArrayList<>();
