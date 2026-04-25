@@ -6,7 +6,7 @@ import Utilities.Input;
 
 import java.util.List;
 
-//Prevents a user for accessing all details of a record until the specified fields are provided
+//Gets parameters from user
 public class RecordAccessGuard
 {
     public static List<Patient> getPatientByParameters()

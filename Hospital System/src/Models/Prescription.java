@@ -90,6 +90,9 @@ public class Prescription
     public void setDuration(int duration) {this.duration = duration;}
     public void setComment(String comment) {this.comment = comment;}
 
+    /**
+     * Displays the details of the prescription
+     */
     public void DisplayDetails()
     {
         System.out.println();

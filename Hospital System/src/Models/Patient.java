@@ -36,6 +36,7 @@ public class Patient
         this.email = Input.RequireNonNull(email);
     }
 
+    //Constructor
     public Patient(String patientID, String insuranceID, String doctorID, String firstName, String surname, String postcode, String address, String phone,  String email, String insuranceCompany, String doctorFirstname, String doctorSurname)
     {
         this.patientID = Input.RequireNonNull(patientID);
@@ -52,6 +53,7 @@ public class Patient
         this.doctorSurname = doctorSurname;
     }
 
+    //Constructor
     public Patient (String firstName, String surname)
     {
         this.firstName = firstName;
@@ -72,16 +74,9 @@ public class Patient
     public String getPhone() {return phone;}
     public String getEmail() {return email;}
 
-//    public void setPatientID(String patientID) {this.patientID = patientID;}
-//    public void setInsuranceID(String insuranceID) {this.insuranceID = insuranceID;}
-//    public void setInsuranceCompany(String insuranceCompany) {this.insuranceCompany = insuranceCompany;}
-//    public void setFirstName(String firstName) {this.firstName = firstName;}
-//    public void setSurname(String surname) {this.surname = surname;}
-//    public void setAddress(String address) {this.address = address;}
-//    public void setPostcode(String postcode) {this.postcode = postcode;}
-//    public void setPhone(String phone) {this.phone = phone;}
-//    public void setEmail(String email) {this.email = email;}
-
+    /**
+     * Displays the details of the patient
+     */
     public void DisplayDetails()
     {
         System.out.println("\nPatient ID: " + patientID);

@@ -28,6 +28,7 @@ public class Visit
         this.diagnosis = diagnosis;
     }
 
+    //Constructor
     public Visit(String visitID, String patientID, String doctorID, LocalDate dateOfVisit, String symptoms, String diagnosis, String patientName,  String doctorName)
     {
         this.visitID = Input.RequireNonNull(visitID);
@@ -60,6 +61,9 @@ public class Visit
     public void setSymptoms(String symptoms) {this.symptoms = symptoms;}
     public void setDiagnosis(String diagnosis) {this.diagnosis = diagnosis;}
 
+    /**
+     * Displays the details of the visit
+     */
     public void DisplayDetails()
     {
         System.out.println();

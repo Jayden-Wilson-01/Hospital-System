@@ -2,6 +2,10 @@ package Models;
 
 public class Specializations
 {
+    /**
+     * Enum of the different possible specializations
+     * Could be a table in the database but for simplicity, an enum was used
+     */
     public enum SpecializationType
     {
         CARDIOLOGY,
@@ -12,6 +16,9 @@ public class Specializations
         PSYCHIATRY
     }
 
+    /**
+     * Display each option with its assigned id number e.g. 1.CARDIOLOGY
+     */
     public static void DisplayOptions()
     {
         System.out.println("Specialization Options");
@@ -22,13 +29,22 @@ public class Specializations
         }
     }
 
+    /**
+     * Shows the amount of specializations
+     * @return the total amount of possible specializations
+     */
     public static int OptionAmount()
     {
         return  SpecializationType.values().length;
     }
 
-    public static String GetSpecializationType(int choice)
+    /**
+     * Takes an inputted id and returns specialization as a string
+     * @param id the id of the specialization e.g. 1
+     * @return the specialization as a string e.g. CARDIOLOGY
+     */
+    public static String GetSpecializationType(int id)
     {
-        return SpecializationType.values()[choice - 1].toString();
+        return SpecializationType.values()[id - 1].toString();
     }
 }

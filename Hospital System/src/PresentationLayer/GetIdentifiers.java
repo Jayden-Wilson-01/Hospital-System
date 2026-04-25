@@ -6,15 +6,23 @@ import Utilities.Input;
 
 public class GetIdentifiers
 {
+    /**
+     * Get id of patient
+     * @param patientExists determine whether to get id of new or existing patient
+     * @return the patient id string
+     */
     public static String getPatientID(boolean patientExists)
     {
+        //Get id of an existing patient
         if(patientExists)
         {
             do
             {
+                //Get patient id
                 String patientId = Input.GetString("Enter Patient ID or 0 to cancel: ");
                 if(patientId.equals("0")){return null;}
 
+                //Check patient exists
                 Patient patient = PatientDataAccess.GetPatientById(patientId);
 
                 if(patient != null)
@@ -27,10 +35,12 @@ public class GetIdentifiers
             while (true);
         }
 
+        //Get id of a new patient
         else
         {
             do
             {
+                //Get patient id
                 String patientId = Input.GetString("Enter Patient ID or 0 to cancel: ");
                 if(patientId.equals("0")){return null;}
 
@@ -47,8 +57,14 @@ public class GetIdentifiers
         }
     }
 
+    /**
+     * Get id of doctor
+     * @param doctorExists determine whether to get id of new or existing doctor
+     * @return the doctor id string
+     */
     public static String getDoctorID(boolean doctorExists)
     {
+        //Get id of existing doctor
         if(doctorExists)
         {
             do
@@ -70,6 +86,7 @@ public class GetIdentifiers
             while (true);
         }
 
+        //Get id of new doctor
         else
         {
             do
@@ -92,12 +109,19 @@ public class GetIdentifiers
         }
     }
 
+    /**
+     * Get id of drug
+     * @param drugExists determine whether to get id of new or existing drug
+     * @return the drug id string
+     */
     public static String getDrugID(boolean drugExists)
     {
+        //Get id of existing drug
         if(drugExists)
         {
             do
             {
+                //Get drug id
                 String drugId = Input.GetString("Enter Drug ID or 0 to cancel: ");
                 if(drugId.equals("0")) {return null;}
 
@@ -113,10 +137,12 @@ public class GetIdentifiers
             while (true);
         }
 
+        //Get id of new drug
         else
         {
             do
             {
+                //Get drug id
                 String drugId = Input.GetString("Enter Drug ID or 0 to cancel: ");
                 if(drugId.equals("0")) {return null;}
 
@@ -133,15 +159,23 @@ public class GetIdentifiers
         }
     }
 
+    /**
+     * Get id of conflicting drug
+     * @param drugExists determine whether to get id of new or existing drug
+     * @return the drug id string
+     */
     public static String getConflictingDrugID(boolean drugExists)
     {
+        //Get id of existing drug
         if(drugExists)
         {
             do
             {
+                //Get drug id
                 String drugId = Input.GetString("Enter ID of conflicting Drug or 0 to finish: ");
                 if(drugId.equals("0")) {return null;}
 
+                //Get
                 Drug drug = DrugDataAccess.getDrugById(drugId);
 
                 if(drug != null)
@@ -154,10 +188,12 @@ public class GetIdentifiers
             while (true);
         }
 
+        //Get id of new drug
         else
         {
             do
             {
+                //Get drug id
                 String drugId = Input.GetString("Enter ID of conflicting Drug or 0 to finish: ");
                 if(drugId.equals("0")) {return null;}
 
@@ -174,12 +210,19 @@ public class GetIdentifiers
         }
     }
 
+    /**
+     * Get id of insurance
+     * @param insuranceExists determine whether to get id of new or existing insurance company
+     * @return the insurance id string
+     */
     public static String getInsuranceID(boolean insuranceExists)
     {
+        //Get id of an existing insurance
         if(insuranceExists)
         {
             do
             {
+                //Get insurance id
                 String insuranceId = Input.GetString("Enter Insurance ID or 0 to cancel: ");
                 if(insuranceId.equals("0")){return null;}
 
@@ -195,10 +238,12 @@ public class GetIdentifiers
             while (true);
         }
 
+        //Get id of new insurance
         else
         {
             do
             {
+                //Get insurance id
                 String insuranceId = Input.GetString("Enter Insurance ID or 0 to cancel: ");
                 if(insuranceId.equals("0")){return null;}
 
@@ -215,12 +260,19 @@ public class GetIdentifiers
         }
     }
 
+    /**
+     * Get id of prescription
+     * @param prescriptionExists determine whether to get id of new or existing prescription
+     * @return the prescription id string
+     */
     public static String getPrescriptionID(boolean prescriptionExists)
     {
+        //Get id of an existing prescription
         if(prescriptionExists)
         {
             do
             {
+                //Get prescription id
                 String prescriptionId = Input.GetString("Enter Prescription ID or 0 to cancel: ");
                 if(prescriptionId.equals("0")) {return null;}
 
@@ -238,8 +290,10 @@ public class GetIdentifiers
 
         else
         {
+            //Get id of new prescription
             do
             {
+                //Get prescription id
                 String prescriptionId = Input.GetString("Enter Prescription ID or 0 to cancel: ");
                 if(prescriptionId.equals("0")) {return null;}
 
@@ -256,12 +310,19 @@ public class GetIdentifiers
         }
     }
 
+    /**
+     * Get id of visit
+     * @param visitExists determine whether to get id of new or existing visit
+     * @return the visit id string
+     */
     public static String getVisitID(boolean visitExists)
     {
+        //Get id of an existing visit
         if(visitExists)
         {
             do
             {
+                //Get visit id
                 String visitId = Input.GetString("Enter Visit ID or 0 to cancel: ");
                 if(visitId.equals("0")) {return null;}
 
@@ -277,10 +338,12 @@ public class GetIdentifiers
             while (true);
         }
 
+        //Get id of new visit
         else
         {
             do
             {
+                //Get visit id
                 String visitId = Input.GetString("Enter Visit ID or 0 to cancel: ");
                 if(visitId.equals("0")) {return null;}
 

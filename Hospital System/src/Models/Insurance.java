@@ -21,11 +21,6 @@ public class Insurance
         this.phone = Input.RequireNonNull(phone);
     }
 
-    public Insurance()
-    {
-        //Empty
-    }
-
     //Getters
     public String getInsuranceID() {return insuranceID;}
     public String getCompany() {return company;}
@@ -38,6 +33,9 @@ public class Insurance
     public void setAddress(String address){this.address = address;}
     public void setPhone(String phone){this.phone = phone;}
 
+    /**
+     * Displays the details of the insurance company
+     */
     public void DisplayDetails()
     {
         System.out.println();

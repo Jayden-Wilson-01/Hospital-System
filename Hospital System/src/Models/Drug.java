@@ -43,6 +43,9 @@ public class Drug
     public void setBenefits(String benefits){this.benefits = benefits;}
     public void setConflictIDs(Set<String> conflictIDs) { this.conflictingIDs = conflictIDs; }
 
+    /**
+     * Displays the details of the drug
+     */
     public void DisplayDetails()
     {
         System.out.println();

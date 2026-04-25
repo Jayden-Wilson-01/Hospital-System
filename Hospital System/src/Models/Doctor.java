@@ -25,11 +25,6 @@ public class Doctor
         this.hospital = hospital; //Allow for nulls
     }
 
-    public Doctor()
-    {
-        //Empty constructor
-    }
-
     //Getters
     public String getDoctorID() {return doctorID;}
     public String getFirstName() {return firstName;}
@@ -46,6 +41,9 @@ public class Doctor
     public void setEmail(String email) {this.email = email;}
     public void setHospital(String hospital) {this.hospital = hospital;}
 
+    /**
+     * Displays the details of the doctor
+     */
     public void DisplayDetails()
     {
         System.out.println();

@@ -17,11 +17,6 @@ public class Specialist extends Doctor
         this.experience = Input.RequireNonNull(experience);
     }
 
-    public Specialist()
-    {
-        //Empty Constructor
-    }
-
     //Getters
     public String getSpecialization() {return specialization;}
     public int getExperience() {return experience;}
@@ -30,6 +25,9 @@ public class Specialist extends Doctor
     public void setExperience(int experience) {this.experience = experience;}
     public void setSpecialization(String specialization){this.specialization = specialization;}
 
+    /**
+     * Displays the details of the specialist overriding the standard doctor display details function
+     */
     @Override
     public void DisplayDetails()
     {

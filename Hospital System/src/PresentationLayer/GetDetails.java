@@ -11,11 +11,18 @@ import java.util.Objects;
 
 public class GetDetails
 {
+    /**
+     * Get user inputs for patient details
+     * @param patientExists determines if the patient is new or existing
+     * @return a patient model with the filled details
+     */
     public static Patient getPatientDetails(boolean patientExists)
     {
+        //Get patient id
         String patientID = GetIdentifiers.getPatientID(patientExists);
         if(patientID == null){return null;}
 
+        //Get insurance id (optional)
         String insuranceID = null;
         boolean includeInsurance = Input.YesNo("Include insurance? ");
         if(includeInsurance)
@@ -24,6 +31,7 @@ public class GetDetails
             if(insuranceID == null){return null;}
         }
 
+        //Get doctor id
         String doctorID = null;
         boolean includeDoctor = Input.YesNo("Include primary doctor? ");
         if(includeDoctor)
@@ -32,6 +40,7 @@ public class GetDetails
             if(doctorID == null){return null;}
         }
 
+        //Get additional details
         String firstname = Input.GetString("Enter patients firstname or 0 to cancel: ");
         if(firstname.equals("0")){return null;}
 
@@ -51,13 +60,21 @@ public class GetDetails
         return new Patient(patientID, insuranceID, doctorID, firstname, surname, null, address, phone, email);
     }
 
+    /**
+     * Get user inputs for doctor details
+     * @param doctorExists determines if the doctor is new or existing
+     * @return a doctor model with the filled details
+     */
     public static Doctor getDoctorDetails(boolean doctorExists)
     {
+        //Determine what form of doctor to get details of: Standard or Specialist
         boolean isSpecialist = Input.YesNo("Is the doctor a specialist? ");
 
+        //Get the doctor id
         String doctorID = GetIdentifiers.getDoctorID(doctorExists);
         if(doctorID == null){return null;}
 
+        //Get additional details
         String firstname = Input.GetString("Enter doctors firstname or 0 to cancel: ");
         if(firstname.equals("0")){return null;}
 
@@ -75,7 +92,6 @@ public class GetDetails
 
         if(isSpecialist)
         {
-
             //Select specialization
             Specializations.DisplayOptions();
             int choice = Input.GetInt("Enter specialization (1-" + Specializations.OptionAmount() + " or 0 to exit): ");
@@ -85,40 +101,29 @@ public class GetDetails
             int experience = Input.GetInt("Enter experience (years) or 0 to exit: ");
             if(experience == 0){return null;}
 
-            //Create model
-            Specialist specialist = new Specialist();
-            specialist.setDoctorID(doctorID);
-            specialist.setFirstName(firstname);
-            specialist.setSurname(surname);
-            specialist.setAddress(address);
-            specialist.setEmail(email);
-            specialist.setHospital(hospital);
-            specialist.setSpecialization(specialization);
-            specialist.setExperience(experience);
-
-            return specialist;
+            //Create and return model
+            return new Specialist(doctorID, firstname, surname, address, email, hospital, specialization, experience);
         }
 
         else
         {
-            //Create model
-            Doctor doctor = new Doctor();
-            doctor.setDoctorID(doctorID);
-            doctor.setFirstName(firstname);
-            doctor.setSurname(surname);
-            doctor.setAddress(address);
-            doctor.setEmail(email);
-            doctor.setHospital(hospital);
-
-            return doctor;
+            //Create and return model
+            return new Doctor(doctorID, firstname, surname, address, email, hospital);
         }
     }
 
+    /**
+     * Get user inputs for insurance details
+     * @param insuranceExists determines if the insurance is new or existing
+     * @return an insurance model with the filled details
+     */
     public static Insurance getInsuranceDetails(boolean insuranceExists)
     {
+        //Get insurance id
         String insuranceId = GetIdentifiers.getInsuranceID(insuranceExists);
         if(insuranceId == null){return null;}
 
+        //Get additional details
         String company = Input.GetString("Enter insurance company name or 0 to cancel: ");
         if(company.equals("0")){return null;}
 
@@ -129,20 +134,21 @@ public class GetDetails
         if(phone.equals("0")){return null;}
 
         //Create model
-        Insurance insurance = new Insurance();
-        insurance.setInsuranceID(insuranceId);
-        insurance.setCompany(company);
-        insurance.setAddress(address);
-        insurance.setPhone(phone);
-
-        return insurance;
+        return new Insurance(insuranceId, company, address, phone);
     }
 
+    /**
+     * Get user inputs for drug details
+     * @param drugExists determines if the drug is new or existing
+     * @return a drug model with the filled details
+     */
     public static Drug getDrugDetails(boolean drugExists)
     {
+        //get drug id
         String drugId = GetIdentifiers.getDrugID(drugExists);
         if(drugId == null){return null;}
 
+        //Get additional details
         String drugName = Input.GetString("Enter drug name or 0 to exit: ");
         if(drugName.equals("0")){return null;}
 
@@ -156,10 +162,15 @@ public class GetDetails
         return new Drug(drugId, drugName, sideEffects, benefits);
     }
 
+    /**
+     * Get user inputs for conflicting drug details
+     * @return a set of details for conflicting drugs
+     */
     public static HashSet<String> getConflictDetails()
     {
         HashSet<String> conflictIds = new HashSet<>();
 
+        //Loop getting conflicting drug id until stopped (stopped when is null which is set in getConflictingDrugID)
         do
         {
             String drugID = GetIdentifiers.getConflictingDrugID(true);
@@ -170,17 +181,24 @@ public class GetDetails
         while (true);
     }
 
+    /**
+     * Get user inputs for prescription details
+     * @param prescriptionExists determines if the prescription is new or existing
+     * @return a prescription model with the filled details
+     */
     public static Prescription getPrescriptionDetails(boolean prescriptionExists)
     {
+        //Get prescription id
         String prescriptionId = GetIdentifiers.getPrescriptionID(prescriptionExists);
         if(prescriptionId == null){return null;}
 
-
+        //Get patient id
         String patientId = GetIdentifiers.getPatientID(true);
         if(patientId == null){return null;}
 
         String drugId = null;
 
+        //Keep asking for drug id until there is no conflict
         do
         {
             drugId = GetIdentifiers.getDrugID(true);
@@ -198,9 +216,11 @@ public class GetDetails
         }
         while (true);
 
+        //Get doctor id
         String doctorId = GetIdentifiers.getDoctorID(true);
         if(doctorId == null){return null;}
 
+        //Get additional details
         LocalDate datePrescribed = Input.GetDate("Enter prescription date (yyyy-mm-dd) or 0 to exit: ");
         if(datePrescribed == null){return null;}
 
@@ -213,31 +233,30 @@ public class GetDetails
         String comment = Input.GetString("Enter comment or 0 to exit: ");
         if(comment.equals("0")){return null;}
 
-        //Create model
-        Prescription prescription = new Prescription();
-        prescription.setPrescriptionID(prescriptionId);
-        prescription.setPatientID(patientId);
-        prescription.setDoctorID(doctorId);
-        prescription.setDrugID(drugId);
-        prescription.setDatePrescribed(datePrescribed);
-        prescription.setDosage(dosage);
-        prescription.setDuration(duration);
-        prescription.setComment(comment);
-
-        return prescription;
+        //Create and return model
+        return new Prescription(prescriptionId, patientId, doctorId, drugId,  datePrescribed, dosage, duration, comment);
     }
 
+    /**
+     * Get user inputs for visit details
+     * @param visitExists determines if the visit is new or existing
+     * @return a visit model with the filled details
+     */
     public static Visit getVisitDetails(boolean visitExists)
     {
+        //Get visit id
         String visitId = GetIdentifiers.getVisitID(visitExists);
         if(visitId == null){return null;}
 
+        //Get doctor id
         String doctorId = GetIdentifiers.getDoctorID(true);
         if(doctorId == null){return null;}
 
+        //get patient id
         String patientId = GetIdentifiers.getPatientID(true);
         if(patientId == null){return null;}
 
+        //Get additional details
         LocalDate dateOfVisit = Input.GetDate("Enter date of visit (yyyy-mm-dd) or 0 to exit: ");
         if(dateOfVisit == null){return null;}
 
