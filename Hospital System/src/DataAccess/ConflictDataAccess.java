@@ -1,10 +1,14 @@
 package DataAccess;
 
+import Models.Conflict;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class ConflictDataAccess
 {
@@ -75,11 +79,11 @@ public class ConflictDataAccess
      * @param drugID The id of the drug you want to find conflicts for
      * @return A HashSet of all id's of conflicting drugs. HashSet used to prevent duplicate id's
      */
-    public static HashSet<String> getConflictsForID(String drugID) {
-        HashSet<String> conflictIDs = new HashSet<>();
+    public static HashSet<Conflict> getConflictsForID(String drugID)
+    {
+        HashSet<Conflict> conflicts = new HashSet<>();
 
-        //Because of the symmetrical design, only need to check one column
-        String sql = "SELECT conflictID FROM drugconflicts WHERE drugID = ?";
+        String sql = "SELECT dc.conflictID, d.drugName FROM drugconflicts dc JOIN drugs d ON dc.conflictID = d.drugID WHERE dc.drugID = ?";
 
         try (PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
@@ -89,16 +93,21 @@ public class ConflictDataAccess
             {
                 while (resultSet.next())
                 {
-                    //Add each conflicting id to the set
-                    conflictIDs.add(resultSet.getString("conflictID"));
+                    //Create a new model object for every row found
+                    Conflict conflict = new Conflict(
+                            resultSet.getString("conflictID"),
+                            resultSet.getString("drugName")
+                    );
+
+                    conflicts.add(conflict);
                 }
             }
         }
         catch (SQLException e)
         {
-            System.out.println("Error retrieving conflicts: " + e.getMessage());
+            System.err.println("Database error: " + e.getMessage());
         }
 
-        return conflictIDs;
+        return conflicts;
     }
 }

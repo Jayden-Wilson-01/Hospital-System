@@ -70,7 +70,7 @@ public class PrescriptionBusinessLogic
         int limit =  Input.GetInt("Enter limit: ");
 
         //Get prescriptions and add to list
-        List<Prescription> prescriptions = PrescriptionDataAccess.loadAllPrescriptions();
+        List<Prescription> prescriptions = PrescriptionDataAccess.loadAllPrescriptions(limit);
 
         //Check if there are records
         if(prescriptions == null || prescriptions.isEmpty())

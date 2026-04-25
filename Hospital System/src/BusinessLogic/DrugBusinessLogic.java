@@ -29,7 +29,7 @@ public class DrugBusinessLogic
         //Add drug to database
         DrugDataAccess.createDrug(drug);
 
-        //Check if there are ant conflicts to add
+        //Check if there are any conflicts to add
         if(conflicts == null){System.out.println("Operation cancelled"); return;}
 
         //Add conflict

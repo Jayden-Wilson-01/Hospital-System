@@ -1,10 +1,14 @@
 package Utilities;
 
 import BusinessLogic.*;
+import DataAccess.ConflictDataAccess;
 import Models.Visit;
 
 public class Menu
 {
+    /**
+     * Menu to show all options
+     */
     public static void MainMenu()
     {
         do
@@ -18,6 +22,7 @@ public class Menu
             System.out.println("4. Manage Drugs");
             System.out.println("5. Manage Visits");
             System.out.println("6. Manage Insurance");
+            System.out.println("7. Manage Conflicts");
 
             int option = Input.GetInt("Enter an option (0-6): ");
 
@@ -44,12 +49,18 @@ public class Menu
                 case 6:
                     ManageInsurance();
                     break;
+                case 7:
+                    ManageConflicts();
+                    break;
             }
 
         }
         while(true);
     }
 
+    /**
+     * Menu to show all patient options
+     */
     private static void ManagePatients()
     {
         do
@@ -95,6 +106,9 @@ public class Menu
         while(true);
     }
 
+    /**
+     * Menu to show all doctor options
+     */
     private static void ManageDoctors()
     {
         do
@@ -144,6 +158,9 @@ public class Menu
         while(true);
     }
 
+    /**
+     * Menu to show all prescription options
+     */
     private static void ManagePrescriptions()
     {
         do
@@ -189,6 +206,9 @@ public class Menu
         while(true);
     }
 
+    /**
+     * Menu to show all drug options
+     */
     private static void ManageDrugs()
     {
         do
@@ -234,6 +254,44 @@ public class Menu
         while(true);
     }
 
+    /**
+     * Menu to show all conflicts options
+     */
+    private static void ManageConflicts()
+    {
+        do
+        {
+            System.out.println("\n\n\n---Manage Conflicts---");
+            System.out.println();
+
+            System.out.println("0. Exit");
+            System.out.println("1. Add Conflict");
+            System.out.println("2. Delete Conflict");
+            System.out.println("3. View Conflicts by Drug id");
+            int option = Input.GetInt("Enter an option (0-3): ");
+
+            switch(option)
+            {
+                case 0:
+                    MainMenu();
+                    return;
+                case 1:
+                    ConflictBusinessLogic.addConflict();
+                    break;
+                case 2:
+                    ConflictBusinessLogic.deleteConflict();
+                    break;
+                case 3:
+                    ConflictBusinessLogic.viewConflictByDrugID();
+                    break;
+            }
+        }
+        while(true);
+    }
+
+    /**
+     * Menu to show all visit options
+     */
     private static void ManageVisits()
     {
         do
@@ -279,6 +337,9 @@ public class Menu
         while(true);
     }
 
+    /**
+     * Menu to show all insurance options
+     */
     private static void ManageInsurance()
     {
         do

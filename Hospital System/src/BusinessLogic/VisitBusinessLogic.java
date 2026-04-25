@@ -71,7 +71,7 @@ public class VisitBusinessLogic
         int limit =  Input.GetInt("Enter limit: ");
 
         //Get each visit and add to list
-        List<Visit> visits = VisitDataAccess.loadAllVisits();
+        List<Visit> visits = VisitDataAccess.loadAllVisits(limit);
 
         //Check if there are records
         if(visits == null || visits.isEmpty())
