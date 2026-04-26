@@ -34,10 +34,12 @@ public class VisitDataAccess
             statement.setString(5, visit.getSymptoms());
             statement.setString(6, visit.getDiagnosis());
             statement.execute();
+
+            System.out.println("Visit created successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error creating visit");
         }
     }
 
@@ -61,10 +63,12 @@ public class VisitDataAccess
             statement.setString(5, visit.getDiagnosis());
             statement.setString(6, visit.getVisitID());
             statement.execute();
+
+            System.out.println("Visit updated successfully");
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error updating visit");
         }
     }
 
@@ -80,10 +84,12 @@ public class VisitDataAccess
         {
             statement.setString(1, visitId);
             statement.execute();
+
+            System.out.println("Visit deleted successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error deleting visit");
         }
     }
 
@@ -122,7 +128,7 @@ public class VisitDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading visits");
             return null;
         }
 
@@ -164,13 +170,13 @@ public class VisitDataAccess
             }
             catch (SQLException e)
             {
-                System.out.println(e.getMessage());
+                System.out.println("Error loading visit");
                 return null;
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading visit");
             return null;
         }
     }
@@ -187,7 +193,7 @@ public class VisitDataAccess
     {
         List<Visit> visits = new ArrayList<>();
 
-        String sql = "SELECT vis.*, CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, CONCAT(pat.firstname, ' ', pat.surname) AS patientName FROM visits vis LEFT JOIN doctors doc ON vis.doctorID = doc.doctorID LEFT JOIN patients pat ON vis.patientID = pat.patientID WHERE pat.firstname = ? AND pat.surname = ? AND doc.surname = ? AND doc.surname = ?";
+        String sql = "SELECT vis.*, CONCAT(doc.firstname, ' ', doc.surname) AS doctorName, CONCAT(pat.firstname, ' ', pat.surname) AS patientName FROM visits vis LEFT JOIN doctors doc ON vis.doctorID = doc.doctorID LEFT JOIN patients pat ON vis.patientID = pat.patientID WHERE pat.firstname = ? AND pat.surname = ? AND doc.firstname = ? AND doc.surname = ?";
 
         try(PreparedStatement statement = Database.getConnection().prepareStatement(sql))
         {
@@ -220,13 +226,13 @@ public class VisitDataAccess
             }
             catch (SQLException e)
             {
-                System.out.println(e.getMessage());
+                System.out.println("Error loading visit");
                 return null;
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+           System.out.println("Error loading visit");
             return null;
         }
     }

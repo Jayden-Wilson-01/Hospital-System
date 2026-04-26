@@ -23,20 +23,8 @@ public class DrugBusinessLogic
 
         if(drug == null){System.out.println("Operation cancelled"); return;}
 
-        //Gather details of  existing drugs that conflict with the drug being added
-        HashSet<String> conflicts = GetDetails.getConflictDetails();
-
         //Add drug to database
         DrugDataAccess.createDrug(drug);
-
-        //Check if there are any conflicts to add
-        if(conflicts == null){System.out.println("Operation cancelled"); return;}
-
-        //Add conflict
-        for (String conflictId : conflicts)
-        {
-            ConflictDataAccess.addConflict(drug.getDrugID(), conflictId);
-        }
     }
 
     /**

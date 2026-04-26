@@ -30,7 +30,7 @@ public class GetIdentifiers
                     return patientId;
                 }
 
-                System.out.print("Patient not found. Try again.");
+                System.out.print("Patient not found. Try again.\n");
             }
             while (true);
         }
@@ -51,7 +51,7 @@ public class GetIdentifiers
                     return patientId;
                 }
 
-                System.out.println("Patient found, ID must be unique. Try again.");
+                System.out.println("Patient found, ID must be unique. Try again.\n");
             }
             while (true);
         }
@@ -81,7 +81,7 @@ public class GetIdentifiers
                     return doctorId;
                 }
 
-                System.out.println("Doctor not found. Try again.");
+                System.out.println("Doctor not found. Try again.\n");
             }
             while (true);
         }
@@ -103,7 +103,7 @@ public class GetIdentifiers
                     return doctorId;
                 }
 
-                System.out.println("Doctor found, ID must be unique. Try again.");
+                System.out.println("Doctor found, ID must be unique. Try again.\n");
             }
             while (true);
         }
@@ -132,7 +132,7 @@ public class GetIdentifiers
                     return drugId;
                 }
 
-                System.out.println("Drug not found. Try again.");
+                System.out.println("Drug not found. Try again.\n");
             }
             while (true);
         }
@@ -153,7 +153,7 @@ public class GetIdentifiers
                     return drugId;
                 }
 
-                System.out.println("Drug found, ID must be unique. Try again.");
+                System.out.println("Drug found, ID must be unique. Try again.\n");
             }
             while (true);
         }
@@ -183,7 +183,7 @@ public class GetIdentifiers
                     return drugId;
                 }
 
-                System.out.println("Drug not found. Try again.");
+                System.out.println("Drug not found. Try again.\n");
             }
             while (true);
         }
@@ -204,7 +204,7 @@ public class GetIdentifiers
                     return drugId;
                 }
 
-                System.out.println("Drug found, ID must be unique. Try again.");
+                System.out.println("Drug found, ID must be unique. Try again.\n");
             }
             while (true);
         }
@@ -233,7 +233,7 @@ public class GetIdentifiers
                     return insuranceId;
                 }
 
-                System.out.println("Insurance not found. Try again.");
+                System.out.println("Insurance not found. Try again.\n");
             }
             while (true);
         }
@@ -254,7 +254,7 @@ public class GetIdentifiers
                     return insuranceId;
                 }
 
-                System.out.println("Insurance found, ID must be unique. Try again.");
+                System.out.println("Insurance found, ID must be unique. Try again.\n");
             }
             while (true);
         }
@@ -283,7 +283,7 @@ public class GetIdentifiers
                     return prescriptionId;
                 }
 
-                System.out.println("Prescription not found. Try again.");
+                System.out.println("Prescription not found. Try again.\n");
             }
             while (true);
         }
@@ -304,7 +304,7 @@ public class GetIdentifiers
                     return prescriptionId;
                 }
 
-                System.out.println("Prescription found, ID must be unique. Try again.");
+                System.out.println("Prescription found, ID must be unique. Try again.\n");
             }
             while (true);
         }
@@ -333,7 +333,7 @@ public class GetIdentifiers
                     return visitId;
                 }
 
-                System.out.println("Visit not found. Try again.");
+                System.out.println("Visit not found. Try again.\n");
             }
             while (true);
         }
@@ -354,7 +354,7 @@ public class GetIdentifiers
                     return visitId;
                 }
 
-                System.out.println("Visit found, ID must be unique. Try again.");
+                System.out.println("Visit found, ID must be unique. Try again.\n");
             }
             while (true);
         }

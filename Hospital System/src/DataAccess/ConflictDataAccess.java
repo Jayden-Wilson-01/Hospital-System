@@ -43,7 +43,7 @@ public class ConflictDataAccess
         }
         catch(SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error while adding conflict.");
         }
     }
 
@@ -70,7 +70,7 @@ public class ConflictDataAccess
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error while deleting conflict.");
         }
     }
 
@@ -105,7 +105,7 @@ public class ConflictDataAccess
         }
         catch (SQLException e)
         {
-            System.err.println("Database error: " + e.getMessage());
+            System.out.println("Error loading conflict");
         }
 
         return conflicts;

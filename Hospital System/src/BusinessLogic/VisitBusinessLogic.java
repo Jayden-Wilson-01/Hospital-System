@@ -95,7 +95,7 @@ public class VisitBusinessLogic
     public static void LoadVisitById()
     {
         //Get id of existing visit
-        String visitId = GetIdentifiers.getDrugID(true);
+        String visitId = GetIdentifiers.getVisitID(true);
         if(visitId == null){System.out.println("Operation cancelled"); return;}
 
         //Create new visit model and populate with the details of the found id

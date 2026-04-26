@@ -29,10 +29,12 @@ public class InsuranceDataAccess
             statement.setString(3, insurance.getAddress());
             statement.setString(4, insurance.getPhone());
             statement.execute();
+
+            System.out.println("Insurance successfully created");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error adding insurance");
         }
     }
 
@@ -52,10 +54,12 @@ public class InsuranceDataAccess
             statement.setString(3, insurance.getPhone());
             statement.setString(4, insurance.getInsuranceID());
             statement.execute();
+
+            System.out.println("Insurance successfully updated");
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error updating insurance");
         }
     }
 
@@ -72,10 +76,12 @@ public class InsuranceDataAccess
             //Set the statement parameters using the according details
             statement.setString(1, insuranceID);
             statement.execute();
+
+            System.out.println("Insurance successfully deleted");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error deleting insurance");
         }
     }
 
@@ -110,7 +116,7 @@ public class InsuranceDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading all insurances");
             return null;
         }
 
@@ -147,7 +153,7 @@ public class InsuranceDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading insurance");
             return null;
         }
     }
@@ -186,7 +192,7 @@ public class InsuranceDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading insurance");
             return null;
         }
     }

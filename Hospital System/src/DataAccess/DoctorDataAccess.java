@@ -44,10 +44,12 @@ public class DoctorDataAccess
             }
 
             statement.execute();
+
+            System.out.println("Doctor added successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error adding doctor");
         }
     }
 
@@ -84,8 +86,12 @@ public class DoctorDataAccess
             statement.setString(8, doctor.getDoctorID());
             statement.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Doctor updated successfully");
+
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Error updating doctor");
         }
     }
 
@@ -102,10 +108,12 @@ public class DoctorDataAccess
             //Set the statement parameters using the provided id
             statement.setString(1, doctorID);
             statement.execute();
+
+            System.out.println("Doctor deleted successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error deleting doctor");
         }
     }
 
@@ -165,7 +173,7 @@ public class DoctorDataAccess
         }
         catch (SQLException e)
         {
-            System.err.println(e.getMessage());
+            System.out.println("Error loading all doctors");
         }
 
         return doctors;
@@ -222,7 +230,7 @@ public class DoctorDataAccess
         }
         catch (SQLException e)
         {
-            System.err.println(e.getMessage());
+            System.out.println("Error loading doctor");
             return null;
         }
 
@@ -289,7 +297,7 @@ public class DoctorDataAccess
         }
         catch (SQLException e)
         {
-            System.err.println(e.getMessage());
+            System.out.println("Error loading doctor");
             return null;
         }
     }
@@ -335,7 +343,7 @@ public class DoctorDataAccess
         }
         catch (SQLException e)
         {
-            System.err.println(e.getMessage());
+            System.out.println("Error loading doctor");
             return null;
         }
     }

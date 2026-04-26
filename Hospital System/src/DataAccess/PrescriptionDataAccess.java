@@ -36,10 +36,12 @@ public class PrescriptionDataAccess
             statement.setInt(7, prescription.getDuration());
             statement.setString(8, prescription.getComment());
             statement.execute();
+
+            System.out.println("Prescription created successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error creating prescription");
         }
     }
 
@@ -65,10 +67,12 @@ public class PrescriptionDataAccess
             statement.setString(7, prescription.getComment());
             statement.setString(8, prescription.getPrescriptionID());
             statement.execute();
+
+            System.out.println("Prescription updated successfully");
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error updating prescription");
         }
     }
 
@@ -84,10 +88,12 @@ public class PrescriptionDataAccess
         {
             statement.setString(1, prescriptionId);
             statement.execute();
+
+            System.out.println("Prescription deleted successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error deleting prescription");
         }
     }
 
@@ -121,9 +127,9 @@ public class PrescriptionDataAccess
                         resultSet.getInt("dosage"),
                         resultSet.getInt("duration"),
                         resultSet.getString("comment"),
-                        resultSet.getString(resultSet.getString("doctorName")),
-                        resultSet.getString(resultSet.getString("patientName")),
-                        resultSet.getString(resultSet.getString("drugName"))
+                        resultSet.getString("doctorName"),
+                        resultSet.getString("patientName"),
+                        resultSet.getString("drugName")
                 );
 
                 prescriptions.add(prescription);
@@ -131,7 +137,7 @@ public class PrescriptionDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading prescriptions");
             return null;
         }
 
@@ -166,15 +172,15 @@ public class PrescriptionDataAccess
                             resultSet.getInt("dosage"),
                             resultSet.getInt("duration"),
                             resultSet.getString("comment"),
-                            resultSet.getString(resultSet.getString("doctorName")),
-                            resultSet.getString(resultSet.getString("patientName")),
-                            resultSet.getString(resultSet.getString("drugName"))
+                            resultSet.getString("doctorName"),
+                            resultSet.getString("patientName"),
+                            resultSet.getString("drugName")
                     );
                 }
             }
             catch (Exception e)
             {
-                System.out.println(e.getMessage());
+                System.out.println("Error loading prescription");
                 return null;
             }
 
@@ -182,7 +188,7 @@ public class PrescriptionDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading prescription");
             return null;
         }
     }
@@ -214,13 +220,13 @@ public class PrescriptionDataAccess
             }
             catch (Exception e)
             {
-                System.out.println(e.getMessage());
+                System.out.println("Error loading prescription");
                 return null;
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading prescription");
             return null;
         }
     }
@@ -271,13 +277,13 @@ public class PrescriptionDataAccess
             }
             catch (Exception e)
             {
-                System.out.println(e.getMessage());
+               System.out.println("Error loading prescription");
                 return null;
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading prescription");
             return null;
         }
     }

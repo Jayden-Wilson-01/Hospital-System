@@ -19,7 +19,7 @@ public class ConflictBusinessLogic
      * @return The string ID of the first conflicting drug found
      * @return null if no conflicts are detected or data is available
      */
-    public static String findActiveConflict(String newDrugID, String patientID)
+    public static Conflict findActiveConflict(String newDrugID, String patientID)
     {
         //Gets patients current drugs patient uses via their prescriptions
         HashSet<String> patientMeds = PrescriptionDataAccess.getDrugIdByPatientId(patientID);
@@ -36,7 +36,7 @@ public class ConflictBusinessLogic
             if (patientMeds.contains(conflict.getDrugID()))
             {
                 //Found a conflict! Return the identifier so the UI can show which drug is the problem
-                return conflict.getDrugName();
+                return conflict;
             }
         }
 
@@ -52,10 +52,13 @@ public class ConflictBusinessLogic
         String drugID = GetIdentifiers.getDrugID(true);
 
         //Get conflicting drug id
-        String conflictingDrugID = GetIdentifiers.getConflictingDrugID(true);
+        HashSet<String> conflicts = GetDetails.getConflictDetails();
 
         //Add to database
-        ConflictDataAccess.addConflict(drugID, conflictingDrugID);
+        for (String conflictId : conflicts)
+        {
+            ConflictDataAccess.addConflict(drugID, conflictId);
+        }
     }
 
     /**

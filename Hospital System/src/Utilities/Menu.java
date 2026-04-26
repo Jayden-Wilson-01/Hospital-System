@@ -353,7 +353,7 @@ public class Menu
             System.out.println("3. Delete Insurance");
             System.out.println("4. View All Insurance");
             System.out.println("5. View Insurance by ID");
-            System.out.println("6. View Insurance by: Patient name, Doctor name");
+            System.out.println("6. View Insurance by: Company name");
 
             int option = Input.GetInt("Enter an option (0-6): ");
 

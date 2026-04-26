@@ -1,13 +1,11 @@
 package PresentationLayer;
 
 import BusinessLogic.ConflictBusinessLogic;
-import BusinessLogic.PrescriptionBusinessLogic;
 import Models.*;
 import Utilities.Input;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 
 public class GetDetails
 {
@@ -98,7 +96,7 @@ public class GetDetails
             if(choice == 0){return null;}
             String specialization = Specializations.GetSpecializationType(choice);
 
-            int experience = Input.GetInt("Enter experience (years) or 0 to exit: ");
+            int experience = Input.GetInt("Enter experience (years) or 0 to cancel: ");
             if(experience == 0){return null;}
 
             //Create and return model
@@ -149,7 +147,7 @@ public class GetDetails
         if(drugId == null){return null;}
 
         //Get additional details
-        String drugName = Input.GetString("Enter drug name or 0 to exit: ");
+        String drugName = Input.GetString("Enter drug name or 0 to cancel: ");
         if(drugName.equals("0")){return null;}
 
         String sideEffects =  Input.GetString("Enter side effects or 0 to cancel: ");
@@ -205,36 +203,37 @@ public class GetDetails
             if(drugId == null){return null;}
 
             //Check if drug conflicts, if it does return;
-            String conflictID = ConflictBusinessLogic.findActiveConflict(drugId, patientId);
+            Conflict conflict = ConflictBusinessLogic.findActiveConflict(drugId, patientId);
 
-            if (conflictID == null)
+            if (conflict == null)
             {
                 break;
             }
 
-            System.out.println("Conflict Found");
+            System.out.println("Conflict found: " + conflict.displayDetails());
         }
         while (true);
+
 
         //Get doctor id
         String doctorId = GetIdentifiers.getDoctorID(true);
         if(doctorId == null){return null;}
 
         //Get additional details
-        LocalDate datePrescribed = Input.GetDate("Enter prescription date (yyyy-mm-dd) or 0 to exit: ");
+        LocalDate datePrescribed = Input.GetDate("Enter prescription date (yyyy-mm-dd) or 0 to cancel: ");
         if(datePrescribed == null){return null;}
 
-        int dosage = Input.GetInt("Enter dosage or 0 to exit: ");
+        int dosage = Input.GetInt("Enter dosage or 0 to cancel: ");
         if(dosage == 0){return null;}
 
-        int duration =  Input.GetInt("Enter duration or 0 to exit: ");
+        int duration =  Input.GetInt("Enter duration or 0 to cancel: ");
         if(duration == 0){return null;}
 
-        String comment = Input.GetString("Enter comment or 0 to exit: ");
+        String comment = Input.GetString("Enter comment or 0 to cancel: ");
         if(comment.equals("0")){return null;}
 
         //Create and return model
-        return new Prescription(prescriptionId, patientId, doctorId, drugId,  datePrescribed, dosage, duration, comment);
+        return new Prescription(prescriptionId, drugId, doctorId, patientId, datePrescribed, dosage, duration, comment);
     }
 
     /**
@@ -257,16 +256,16 @@ public class GetDetails
         if(patientId == null){return null;}
 
         //Get additional details
-        LocalDate dateOfVisit = Input.GetDate("Enter date of visit (yyyy-mm-dd) or 0 to exit: ");
+        LocalDate dateOfVisit = Input.GetDate("Enter date of visit (yyyy-mm-dd) or 0 to cancel: ");
         if(dateOfVisit == null){return null;}
 
-        String symptoms = Input.GetString("Enter symptoms or 0 to exit: ");
+        String symptoms = Input.GetString("Enter symptoms or 0 to cancel: ");
         if(symptoms.equals("0")){return null;}
 
-        String diagnosis = Input.GetString("Enter diagnosis or 0 to exit: ");
+        String diagnosis = Input.GetString("Enter diagnosis or 0 to cancel: ");
         if(diagnosis.equals("0")){return null;}
 
         //Create and return model
-        return new Visit(visitId,  doctorId, patientId, dateOfVisit, symptoms, diagnosis);
+        return new Visit(visitId, patientId, doctorId, dateOfVisit, symptoms, diagnosis);
     }
 }

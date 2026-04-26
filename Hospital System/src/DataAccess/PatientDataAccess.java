@@ -32,10 +32,12 @@ public class PatientDataAccess
             statement.setString(7, patient.getPhone());
             statement.setString(8, patient.getEmail());
             statement.execute();
+
+            System.out.println("Patient created successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error adding patient");
         }
     }
 
@@ -59,10 +61,12 @@ public class PatientDataAccess
             statement.setString(7, patient.getEmail());
             statement.setString(8, patient.getPatientID());
             statement.execute();
+
+            System.out.println("Patient updated successfully");
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error updating patient");
         }
     }
 
@@ -78,10 +82,12 @@ public class PatientDataAccess
         {
             statement.setString(1, patientID);
             statement.execute();
+
+            System.out.println("Patient deleted successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error deleting patient");
         }
     }
 
@@ -127,13 +133,13 @@ public class PatientDataAccess
             }
             catch (SQLException e)
             {
-                System.out.println(e.getMessage());
+                System.out.println("Error loading patients");
                 return null;
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading patients");
             return null;
         }
 
@@ -177,13 +183,13 @@ public class PatientDataAccess
             }
             catch (SQLException e)
             {
-                System.out.println(e.getMessage());
+                System.out.println("Error loading patient");
                 return null;
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading patient");
             return null;
         }
 
@@ -235,13 +241,13 @@ public class PatientDataAccess
             }
             catch (SQLException e)
             {
-                System.out.println(e.getMessage());
+                System.out.println("Error loading patient");
                 return null;
             }
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading patient");
             return null;
         }
     }

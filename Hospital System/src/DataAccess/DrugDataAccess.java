@@ -26,10 +26,12 @@ public class DrugDataAccess
             statement.setString(3, drug.getSideEffects());
             statement.setString(4, drug.getBenefits());
             statement.execute();
+
+            System.out.println("Drug successfully added");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error adding drug");
         }
     }
 
@@ -49,10 +51,12 @@ public class DrugDataAccess
             statement.setString(3, drug.getBenefits());
             statement.setString(4, drug.getDrugID());
             statement.execute();
+
+            System.out.println("Drug updated successfully");
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error updating drug");
         }
     }
 
@@ -69,10 +73,12 @@ public class DrugDataAccess
             //Set the statement parameters using the according details
             statement.setString(1, drugID);
             statement.execute();
+
+            System.out.println("Drug deleted successfully");
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error deleting drug");
         }
     }
 
@@ -107,7 +113,7 @@ public class DrugDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading all drugs");
             return null;
         }
 
@@ -144,7 +150,7 @@ public class DrugDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading drug");
             return null;
         }
     }
@@ -183,7 +189,7 @@ public class DrugDataAccess
         }
         catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error loading drug");
             return null;
         }
     }

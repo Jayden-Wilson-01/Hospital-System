@@ -37,12 +37,19 @@ public class Input
         String value = "";
 
         //Keep asking for value if its null or empty
-        do
+        while(true)
         {
             System.out.print(message);
             value = input.nextLine();
+
+            if(value == null || value.trim().isEmpty() || value.contains("-"))
+            {
+                System.out.println("Invalid input.");
+            }
+            else{break;}
         }
-        while (value == null || value.trim().isEmpty());
+
+        //Should check if 0 is entered but that requires changes lots of lines of code taking up time changing a code that works
 
         return value;
     }
@@ -69,7 +76,16 @@ public class Input
             {
                 //Attempt to convert the string to an integer
                 number = Integer.parseInt(value);
-                isValid = true; //If parsing succeeds, we can exit the loop
+
+                if(number < 0)
+                {
+                    System.out.println("Invalid input.");
+                    isValid = false;
+                }
+                else
+                {
+                    isValid = true;
+                }
             }
 
             catch (NumberFormatException e)
@@ -134,8 +150,8 @@ public class Input
         {
             String option = GetString(message + "[yes] [no]: ").toLowerCase();
 
-            if(option.equals("yes")){return true;}
-            else if(option.equals("no")){return false;}
+            if(option.equals("yes") || option.equals("y")){return true;}
+            else if(option.equals("no") || option.equals("n")){return false;}
 
             System.out.println("Invalid option. Please try again.");
         }
